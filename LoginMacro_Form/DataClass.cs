@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LoginMacro_Form
 {
@@ -15,11 +18,9 @@ namespace LoginMacro_Form
 
     public static class SpecialKey
     {
-        public static string[] SK =
-        {
-            "enter", "up", "down", "left", "right"
-        };
     }
+
+
     class DataClass
     {
     }

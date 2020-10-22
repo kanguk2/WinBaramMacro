@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,7 +18,7 @@ namespace LoginMacro_Form
         private FileControl FC;
         private DataTable IDDataTable = new DataTable();
         private DataTable CommandDataTable = new DataTable();
-        private List<CommandDatas> commanddatas;
+        private List<CommandDatas> commanddatas = new List<CommandDatas>();
 
         private Log Log_move;
 
@@ -46,7 +47,6 @@ namespace LoginMacro_Form
 
             dataGridView_IDInfo.CellClick += new DataGridViewCellEventHandler(BTDisplay_Click);
 
-            
             try
             {
                 foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
@@ -109,17 +109,11 @@ namespace LoginMacro_Form
                 foreach (string strID in this.IDDatas.getDataTable().Keys)
                     cCell.Items.Add(strID);
 
-                if (FC.LoadData(ref commanddatas) == true)
-                {
-                    foreach (CommandDatas data in commanddatas)
-                    {
-                        CommandDataTable.Rows.Add(data.strCommand);
-                    }
-                }
-                else
-                    commanddatas = new List<CommandDatas>();
-                
+
                 this.dataGridView_Command.DataSource = this.CommandDataTable;
+
+                Init_CommandRow();
+
                 dataGridView_Command.Columns.Add(BTSingle);
                 dataGridView_Command.CellClick += new DataGridViewCellEventHandler(CommandInput);
                 dataGridView_Command.Columns.Add(cCell);
@@ -134,6 +128,26 @@ namespace LoginMacro_Form
             }
         }
 
+        private void Init_CommandRow()
+        {
+            try
+            {
+                this.CommandDataTable.Clear();
+
+                if (FC.LoadData(ref commanddatas) == true)
+                {
+                    foreach (CommandDatas data in commanddatas)
+                    {
+                        CommandDataTable.Rows.Add(data.strCommand);
+                    }
+                }
+                else
+                    commanddatas = new List<CommandDatas>();
+            }
+            catch(Exception e) { Log_move.Format(e.ToString()); }            
+        }
+
+
         private void CommandInput(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -146,27 +160,6 @@ namespace LoginMacro_Form
 
 
                 CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
-/*
-                string strInput = dataGridView_Command.Rows[nIndex].Cells["명령어"].Value.ToString();
-
-                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
-                string[] inputs = stringParser.ParserSpecial(strInput);
-
-                foreach(string input in inputs)
-                {
-                    if (input == "")
-                        continue;
-
-                    if (input.ToUpper() == "enter".ToUpper())
-                        ProcessControl.keyInput(Keys.Enter, 100);
-                    else
-                        SendKeys.SendWait(input);
-                }
-
-                Log_move.Format(strID + ": " + strInput + "수행");
-*/
-                //This is the code which will show the button click row data. Thank you.
             }
             catch (Exception ex)
             {
@@ -182,20 +175,7 @@ namespace LoginMacro_Form
             string strInput = dataGridView_Command.Rows[nIndex].Cells["명령어"].Value.ToString();
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
-            string[] inputs = stringParser.ParserSpecial(strInput);
-
-            foreach (string input in inputs)
-            {
-                if (input == "")
-                    continue;
-
-                if (input.ToUpper() == "enter".ToUpper())
-                    ProcessControl.keyInput(Keys.Enter, 100);
-                else
-                    SendKeys.SendWait(input);
-            }
-
+            
             Log_move.Format(strID + ": " + strInput + "수행");
         }
 
@@ -223,29 +203,6 @@ namespace LoginMacro_Form
             return -1;
         }
 
-        private void button_AddID_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                int nIndex = CommandDataTable.Rows.Count - 1;
-
-                string strCommand;
-                strCommand = CommandDataTable.Rows[nIndex]["명령어"].ToString();
-
-                if (strCommand == "" || stringParser.CommandJudge(strCommand) == false)
-                {
-                    MessageBox.Show("명령어를 다시 확인해주세요.");
-                    return;
-                }
-                commanddatas.Add(new CommandDatas { strCommand = strCommand });
-
-                this.dataGridView_Command.DataSource = this.CommandDataTable;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
 
         private void button_IDDataSave_Click(object sender, EventArgs e)
         {
@@ -283,53 +240,11 @@ namespace LoginMacro_Form
 
                     eventMove(nIndex);
                 }
-/*
-                int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
-                string strID = GetDataGridSelectID(nIdIndex);
-
-                string strPlace = textBox_place.Text;
-
-                int iPos = 0;
-                for(iPos = 0; iPos < PLACE.strPLACE.Length; iPos++)
-                {
-                    if (strPlace == PLACE.strPLACE[iPos])
-                        break;
-                }
-
-                if (iPos == PLACE.strPLACE.Length)
-                {
-                    MessageBox.Show("잘못 입력하셨습니다.");
-                    throw new Exception();
-                }
-
-                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
-                if (iPos >= 10)
-                {
-                    SendKeys.SendWait("ZX");
-                    iPos -= 10;
-                }
-
-                ProcessControl.keyInput(Keys.Enter,100);
-                SendKeys.SendWait("귀환");
-                ProcessControl.keyInput(Keys.Enter,300);
-
-                for(int i=0; i<iPos+1; i++)
-                {
-                    ProcessControl.keyInput(Keys.Down, 10);
-                }
-                ProcessControl.keyInput(Keys.Enter, 300);
-
-                SendKeys.SendWait("01");
-                ProcessControl.keyInput(Keys.Enter);
-
-                Log_move.Format(strID + ": " + strPlace + "이동완료.");*/
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
-
         }
 
         private void eventMove(int nIndex)
@@ -355,6 +270,9 @@ namespace LoginMacro_Form
 
             if (iPos >= 10)
             {
+                SendKeys.SendWait("01");
+                ProcessControl.keyInput(Keys.Enter);
+
                 SendKeys.SendWait("ZX");
                 iPos -= 10;
             }
@@ -377,18 +295,19 @@ namespace LoginMacro_Form
 
         private void button_CommandDelete_Click(object sender, EventArgs e)
         {
+            CommandRowDelete(dataGridView_Command.CurrentCell.RowIndex);
+        }
+
+        private void CommandRowDelete(int nIndex)
+        {
             try
             {
-                int nIndex = dataGridView_Command.CurrentCell.RowIndex;
-
                 dataGridView_Command.Rows.RemoveAt(nIndex);
                 commanddatas.RemoveAt(nIndex);
-
-                this.dataGridView_Command.DataSource = this.CommandDataTable;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                Log_move.Format(ex.ToString());
             }
         }
 
@@ -443,6 +362,7 @@ namespace LoginMacro_Form
         {
             try
             {
+                string strPreID = "", strCurID = "";
                 for (int nIndex = 0; nIndex < dataGridView_Command.Rows.Count; nIndex++)
                 {
                     if (dataGridView_Command.Rows[nIndex].Selected == false)
@@ -451,11 +371,52 @@ namespace LoginMacro_Form
                     if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
                         continue;
 
-                    CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
+                    strCurID = dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString();
+
+                    if (strPreID == strCurID)
+                        Thread.Sleep(300);
+
+                    CommandInput(nIndex, strCurID);
+                    strPreID = strCurID;
                 }
             }
             catch (Exception)
             {
+            }
+        }
+
+        private void button_IDDataLoad_Click(object sender, EventArgs e)
+        {
+            string strFileFullName = FileControl.getFilePathFromDialog();
+
+            if (strFileFullName == null)
+                return;
+
+            CommandDataTable.Rows.Clear();
+
+            FC.ChangeFileCommand(strFileFullName);
+            Init_CommandRow();
+        }
+
+        private void button_AddCommand_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int nIndex = CommandDataTable.Rows.Count - 1;
+
+                string strCommand;
+                strCommand = CommandDataTable.Rows[nIndex]["명령어"].ToString();
+
+                if (strCommand == "" || stringParser.CommandJudge(strCommand) == false)
+                {
+                    MessageBox.Show("명령어를 다시 확인해주세요.");
+                    return;
+                }
+                commanddatas.Add(new CommandDatas { strCommand = strCommand });
+            }
+            catch (Exception ex)
+            {
+                Log_move.Format(ex.ToString());
             }
         }
     }

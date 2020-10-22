@@ -21,20 +21,28 @@ namespace LoginMacro_Form
         public FileControl()
         {
             //Default Value
-            strFilePath = "D:\\Kanguk\\Game";
-            strFileName_ID = "IDDatas.json";
-            strFileName_Command = "CommandDatas.json";
+            strFileName_ID = "D:\\Kanguk\\Game\\IDDatas.json";
+            strFileName_Command = "D:\\Kanguk\\Game\\CommandDatas.json";
         }
 
-        public void ChangeFilePath(string FilePath)
+        public void ChangeFileID(string strID)
         {
-            this.strFilePath = FilePath;
+            strFileName_ID = strID;
         }
+
+        public void ChangeFileCommand(string strCommand)
+        {
+            strFileName_Command = strCommand;
+        }
+
+
         public void LoadData(ref IDData_KANG idData)
         {
             try
             {
-                string json = File.ReadAllText(strFilePath + "\\" + strFileName_ID);
+                idData.getDataTable().Clear();
+
+                string json = File.ReadAllText(strFileName_ID);
 
                 JObject applyJObj = JObject.Parse(json);
 
@@ -60,8 +68,7 @@ namespace LoginMacro_Form
             {
                 string json = JsonConvert.SerializeObject(iDData.getDataTable(), Newtonsoft.Json.Formatting.Indented);
 
-                File.WriteAllText(strFilePath + "\\" + strFileName_ID, json);
-
+                File.WriteAllText(strFileName_ID, json);
             }
             catch (Exception)
             {
@@ -74,7 +81,9 @@ namespace LoginMacro_Form
             bool bRet = true;
             try
             {
-                string strFullPath = strFilePath + "\\" + strFileName_Command;
+                commanddatas.Clear();
+
+                string strFullPath = strFileName_Command;
 
                 if (File.Exists(strFullPath) == false)
                 {
@@ -83,14 +92,6 @@ namespace LoginMacro_Form
                 string json = File.ReadAllText(strFullPath);
 
                 commanddatas = JsonConvert.DeserializeObject<List<CommandDatas>>(json);
-/*
-                foreach (var data in applyJObj)
-                {
-                    CommandDatas tmp = new CommandDatas { strCommand = data.Value["strCommand"].ToString() };
-
-                    commanddatas.Add(tmp);
-                }
-*/
             }
             catch(Exception e)
             {
@@ -107,7 +108,7 @@ namespace LoginMacro_Form
             {
                 string json = JsonConvert.SerializeObject(commanddatas, Newtonsoft.Json.Formatting.Indented);
 
-                File.WriteAllText(strFilePath + "\\" + strFileName_Command, json);
+                File.WriteAllText(strFileName_Command, json);
 
             }
             catch (Exception)

@@ -41,6 +41,7 @@
             this.button_AddID = new System.Windows.Forms.Button();
             this.button_Refresh = new System.Windows.Forms.Button();
             this.textBox_Log = new System.Windows.Forms.TextBox();
+            this.button_IDDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Info)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,11 +182,23 @@
             this.textBox_Log.Size = new System.Drawing.Size(277, 211);
             this.textBox_Log.TabIndex = 25;
             // 
+            // button_IDDelete
+            // 
+            this.button_IDDelete.Location = new System.Drawing.Point(361, 530);
+            this.button_IDDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_IDDelete.Name = "button_IDDelete";
+            this.button_IDDelete.Size = new System.Drawing.Size(113, 34);
+            this.button_IDDelete.TabIndex = 26;
+            this.button_IDDelete.Text = "삭제";
+            this.button_IDDelete.UseVisualStyleBackColor = true;
+            this.button_IDDelete.Click += new System.EventHandler(this.button_IDDelete_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(988, 610);
+            this.Controls.Add(this.button_IDDelete);
             this.Controls.Add(this.textBox_Log);
             this.Controls.Add(this.button_Refresh);
             this.Controls.Add(this.button_AddID);
@@ -224,6 +237,7 @@
         private System.Windows.Forms.Button button_AddID;
         private System.Windows.Forms.Button button_Refresh;
         private System.Windows.Forms.TextBox textBox_Log;
+        private System.Windows.Forms.Button button_IDDelete;
     }
 }
 

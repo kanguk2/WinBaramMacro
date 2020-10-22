@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +23,6 @@ namespace LoginMacro_Form
         private DataTable IDDataTable = new DataTable();
 
         private static FileControl FC = new FileControl();
-        private static ImageProc imageproc = new ImageProc();
         private object lockObject = new object();
         private Thread Thread_LE;
         private Thread Thread_MultiLE;
@@ -88,6 +88,8 @@ namespace LoginMacro_Form
 
         private void InitGridDataView()
         {
+            this.dataGridView_Info.DataSource = this.IDDataTable;
+
             DataGridViewButtonColumn BTSingle = new DataGridViewButtonColumn();
             BTSingle.HeaderText = "개별실행";
             BTSingle.Name = "Single Execute";
@@ -105,9 +107,7 @@ namespace LoginMacro_Form
             IDDataTable.Columns.Add("STATE");
             IDDataTable.Columns["STATE"].ReadOnly = true;
             IDDataTable.Columns.Add("GROUP", typeof(int));
-            FC.LoadData(ref IDDatas);
-            InitRow();
-            this.dataGridView_Info.DataSource = this.IDDataTable;
+
             this.dataGridView_Info.Columns["GROUP"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 
             dataGridView_Info.Columns.Add(BTSingle);
@@ -115,12 +115,16 @@ namespace LoginMacro_Form
 
             dataGridView_Info.CellClick += new DataGridViewCellEventHandler(SingleExecute);
             dataGridView_Info.CellClick += new DataGridViewCellEventHandler(SingleKillProcess);
+
+            InitIDInfoRow();
         }
 
-        private void InitRow()
+        private void InitIDInfoRow()
         {
             try
             {
+                FC.LoadData(ref IDDatas);
+
                 foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
                 {
                     IDDataTable.Rows.Add(items.Key, items.Value.strPW, items.Value.strSTATE, items.Value.nGroup);
@@ -369,9 +373,19 @@ namespace LoginMacro_Form
 
         private void ChangeTextRow(int nIndex, Boolean bConnect)
         {
-            IDDataTable.Columns["STATE"].ReadOnly = false;
-            IDDataTable.Rows[nIndex]["STATE"] = bConnect ? "연결됨" : "연결안됨";
-            IDDataTable.Columns["STATE"].ReadOnly = true;
+            if (this.InvokeRequired == false)
+            {
+                IDDataTable.Columns["STATE"].ReadOnly = false;
+                IDDataTable.Rows[nIndex]["STATE"] = bConnect ? "연결됨" : "연결안됨";
+                IDDataTable.Columns["STATE"].ReadOnly = true;
+            }
+            else
+            {
+                var d =
+                    Invoke((MethodInvoker)delegate () {
+                        ChangeTextRow(nIndex, bConnect);
+                    });
+            }
         }
 
         private void ThreadMultiExecute()
@@ -580,16 +594,55 @@ namespace LoginMacro_Form
 
         private void button_IDDataLoad_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string strFileFullName = FileControl.getFilePathFromDialog();
 
+                if (strFileFullName == null)
+                    return;
+
+                IDDataTable.Rows.Clear();
+
+                FC.ChangeFileID(strFileFullName);
+
+                InitIDInfoRow();
+            }
+            catch (Exception ex) { logs.Format(ex.ToString()); }
         }
 
         private void button_AddID_Click(object sender, EventArgs e)
         {
             try
             {
-                
+                int nIndex = IDDataTable.Rows.Count - 1;
+
+                string strID, strPW, strGroup;
+
+                strID = IDDataTable.Rows[nIndex]["ID"].ToString();
+                strPW = IDDataTable.Rows[nIndex]["PW"].ToString();
+
+                if (IDDatas.getDataTable().ContainsKey(strID))
+                {
+                    logs.Format(strID + " 가 현재 저장되어있습니다.");
+                }
+
+                if (strID == "" || strPW == "")
+                {
+                    MessageBox.Show("정보를 잘못입력하셨습니다.");
+                    return;
+                }
+
+                strGroup = IDDataTable.Rows[nIndex]["GROUP"].ToString();
+
+                if (strGroup == "")
+                {
+                    IDDataTable.Rows[nIndex]["GROUP"] = "0";
+                    strGroup = "0";
+                }
+
+                IDDatas.Add(strID, new Datas { strPW = strPW, strSTATE = "연결안됨", nPID = -1, nGroup = int.Parse(strGroup)});
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logs.Format(ex.ToString());
             }
@@ -628,6 +681,25 @@ namespace LoginMacro_Form
                 logs.Format(ex.ToString());
             }
         }
+
+        private void button_IDDelete_Click(object sender, EventArgs e)
+        {
+            FuncIDDelete(dataGridView_Info.CurrentCell.RowIndex);
+        }
+
+        private void FuncIDDelete(int nIndex)
+        {
+            try
+            {
+                IDDatas.Delete(GetDataGridSelectID(nIndex));
+                IDDataTable.Rows.RemoveAt(nIndex);
+            }
+            catch (Exception ex)
+            {
+                logs.Format(ex.ToString());
+            }
+        }
+
     }
 }
     
