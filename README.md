@@ -32,13 +32,17 @@ Login Macro
  - 부여일경우 귀환 전 비영사천문 추가.
 
 10/23
++ 로그인 이미지 crop 할경우 버그 수정
+ : 생성자 static 으로 재설정하여 List Size Add 되도록 수정.
++ 토로라비 이동 개선
+ : sendkey {enter}로 대체
 
 1. Json Save or Load할때 데이터 없을경우 처리부분 안정화 예정. 
  - ID 부분 Group 부분 미입력시 0으로 입력되도록 수정 - 해당부분 Cross Error 처리.
  - Register에 마지막에 호출된 파일경로 저장하여 이후에 프로그램 실행시 해당경로로 불러와지도록 수정.
  - 현재 오픈된 파일 UI구현
 
-2. Refresh 부분 업데이트 예정 - 보류
+2. Refresh 부분 업데이트 예정
  - 현재는 Process만 켜져있으면 로그인으로 인식
   a. Process 존재하는지 확인.
   b. ID부분 비교하여 켜져있는지 확인.
