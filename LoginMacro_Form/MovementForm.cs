@@ -158,7 +158,6 @@ namespace LoginMacro_Form
                 int nIndex = e.RowIndex;
                 int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
 
-
                 CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
             }
             catch (Exception ex)
@@ -175,7 +174,12 @@ namespace LoginMacro_Form
             string strInput = dataGridView_Command.Rows[nIndex].Cells["명령어"].Value.ToString();
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-            
+
+            if (stringParser.CommandJudge(strInput) == false)
+                return;
+
+            SendKeys.SendWait(strInput);
+
             Log_move.Format(strID + ": " + strInput + "수행");
         }
 

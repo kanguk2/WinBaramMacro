@@ -20,14 +20,6 @@ namespace LoginMacro_Form
             strFileName = str.Substring(nPos+1, nLength - nPos -1);
         }
 
-        public static string[] ParserSpecial(string str)
-        {
-            char[] split = { '{', '}' };
-
-            string[] data = str.Split(split);
-
-            return data;
-        }
         public static bool CommandJudge(string str)
         {
             int n = 0;
