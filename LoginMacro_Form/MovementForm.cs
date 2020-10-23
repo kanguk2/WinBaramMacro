@@ -270,25 +270,20 @@ namespace LoginMacro_Form
 
             if (iPos >= 10)
             {
-                SendKeys.SendWait("01");
-                ProcessControl.keyInput(Keys.Enter);
+                SendKeys.SendWait("01{enter}ZX");
 
-                SendKeys.SendWait("ZX");
                 iPos -= 10;
             }
 
-            ProcessControl.keyInput(Keys.Enter, 100);
-            SendKeys.SendWait("귀환");
-            ProcessControl.keyInput(Keys.Enter, 300);
+            SendKeys.SendWait("{enter}귀환{enter}");
+            Thread.Sleep(300);
 
             for (int i = 0; i < iPos + 1; i++)
             {
                 ProcessControl.keyInput(Keys.Down, 10);
             }
-            ProcessControl.keyInput(Keys.Enter, 300);
 
-            SendKeys.SendWait("01");
-            ProcessControl.keyInput(Keys.Enter);
+            SendKeys.SendWait("{enter}01{enter}");
 
             Log_move.Format(strID + ": " + strPlace + "이동완료.");
         }
@@ -337,19 +332,16 @@ namespace LoginMacro_Form
 
                 Log_move.Format(strID + ": " + PLACE.strPLACE[iPos] + "에서 복귀시작");
 
-                SendKeys.SendWait("04");
-                ProcessControl.keyInput(Keys.Enter, 300);
+                SendKeys.SendWait("04{enter}");
 
                 if (iPos >= 10)
                 {
-                    string str = "9굴" + PLACE.strPLACE[iPos][0];
+                    string str = "9굴" + PLACE.strPLACE[iPos][0] + "{enter}";
                     SendKeys.SendWait(str);
-                    ProcessControl.keyInput(Keys.Enter, 300);
                 }
                 else
                 {
-                    SendKeys.SendWait("9조그만삐삐");
-                    ProcessControl.keyInput(Keys.Enter, 300);
+                    SendKeys.SendWait("9조그만삐삐{enter}");
                 }
             }
             catch (Exception ex)

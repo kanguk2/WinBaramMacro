@@ -169,6 +169,9 @@ namespace LoginMacro_Form
                             case eSeq_Login.LoginInputInfo:
                                 bRet = InputInfoProgram(nIndex, nID);
                                 break;
+                            case eSeq_Login.LoginFinalCheck:
+                                bRet = !ReconnectCheck(nID);
+                                break;
                             case eSeq_Login.LoginError:
                                 throw new Exception(strError);
                         }
@@ -233,7 +236,6 @@ namespace LoginMacro_Form
             {
                 ProcessControl.Display(nID);
                 Thread.Sleep(400); // 어떻게 할수가없음.
-
                 ProcessControl.keyInput(Keys.Tab);
                 ProcessControl.keyInput(Keys.Tab);
                 ProcessControl.keyInput(Keys.Enter, 1500);
@@ -369,6 +371,21 @@ namespace LoginMacro_Form
                 }
             }
             catch (Exception e) { }
+        }
+        private bool ReconnectCheck(int nID)
+        {
+            bool bReconnect = true;
+            try
+            {
+                Image img_capture = ImageProc.ImageCrop(nID, eImagetype.total);
+                string strFilePath = ImageProc.m_strLogin + "연결해제.bmp";
+
+
+                bReconnect = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));                    
+            }
+            catch(Exception e) { logs.Format(e.ToString()); }
+
+            return bReconnect;
         }
 
         private void ChangeTextRow(int nIndex, Boolean bConnect)
