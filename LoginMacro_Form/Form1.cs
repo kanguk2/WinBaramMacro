@@ -137,7 +137,7 @@ namespace LoginMacro_Form
             }
         }
 
-        public void ThreadNewSequence(int nIndex, Boolean bSingle = false)
+        public void ThreadNewSequence(int nIndex, eSeq_Login eSL = eSeq_Login.LoginExecute, Boolean bSingle = false)
         {
             lock (lockObject)
             {
@@ -146,10 +146,10 @@ namespace LoginMacro_Form
                 logs.Format(strID + " 로그인 시작");
 
                 int nID = -1;
+                int nTry = 0;
                 bool bRet = true;
                 try
                 {
-                    eSeq_Login eSL = eSeq_Login.LoginExecute;
                     string strError = "Error!! : ";
                     while (eSL != eSeq_Login.LoginComplete)
                     {
@@ -179,9 +179,18 @@ namespace LoginMacro_Form
                         }
                         if (bRet == false)
                         {
-                            strError += eSL.ToString();
-                            eSL = eSeq_Login.LoginError;
-                            ProcessControl.KillProcess(nID);
+                            if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
+                            {
+                                Thread.Sleep(1000);
+                                eSL = eSeq_Login.LoginSelectServer;
+                                logs.Format($"{strID} : Reconnect 확인 재시도..");
+                            }
+                            else
+                            {
+                                strError += eSL.ToString();
+                                eSL = eSeq_Login.LoginError;
+                                ProcessControl.KillProcess(nID);
+                            }
                         }
                         else
                             eSL++;
@@ -191,7 +200,6 @@ namespace LoginMacro_Form
                     {
                         IDDatas.getDataTable()[strID].nPID = nID;
                         DataTableToDicData();
-                        FC.SaveData(IDDatas);
 
                         ProcessControl.MiniMizedProcess(nID);
                     }
@@ -259,7 +267,6 @@ namespace LoginMacro_Form
             {
                 ProcessControl.keyInput(Keys.Down);
                 ProcessControl.keyInput(Keys.Enter, 1000);
-
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
@@ -396,6 +403,7 @@ namespace LoginMacro_Form
             {
                 IDDataTable.Columns["STATE"].ReadOnly = false;
                 IDDataTable.Rows[nIndex]["STATE"] = bConnect ? "연결됨" : "연결안됨";
+                IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].strSTATE = bConnect ? "연결됨" : "연결안됨";
                 IDDataTable.Columns["STATE"].ReadOnly = true;
             }
             else
@@ -488,7 +496,7 @@ namespace LoginMacro_Form
                     ProcessControl.Display(IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID);
                 else
                 {
-                    Thread_LE = new Thread(() => ThreadNewSequence(nIndex, true));
+                    Thread_LE = new Thread(() => ThreadNewSequence(nIndex, eSeq_Login.LoginExecute, true));
                     Thread_LE.Start();
                 }
                 //This is the code which will show the button click row data. Thank you.
@@ -567,7 +575,7 @@ namespace LoginMacro_Form
         {
             int nSel = dataGridView_Info.CurrentCell.RowIndex;
 
-            ThreadNewSequence(nSel , true);
+//            ThreadNewSequence(nSel , true);
         }
 
         private void button_FornIC_Click(object sender, EventArgs e)
@@ -593,7 +601,7 @@ namespace LoginMacro_Form
         {
             int nIndex = 0;
 
-            string strID, strPW;
+            string strID, strPW, strState;
             int nGroup;
 
             foreach (var data in IDDatas.getDataTable())
