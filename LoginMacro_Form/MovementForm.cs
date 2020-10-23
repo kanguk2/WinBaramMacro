@@ -266,7 +266,7 @@ namespace LoginMacro_Form
 
             if (iPos >= PLACE.strPLACE.Length)
             {
-                Log_move.Format(strID + "이동실패 : 장소를 잘못 입력하셨습니다");
+                Log_move.Format($"{strID} 이동실패 : 장소를 잘못 입력하셨습니다");
                 return;
             }
 
@@ -274,7 +274,8 @@ namespace LoginMacro_Form
 
             if (iPos >= 10)
             {
-                SendKeys.SendWait("01{enter}ZX");
+                SendKeys.SendWait("01{enter}");
+                SendKeys.SendWait("ZX");
 
                 iPos -= 10;
             }
@@ -289,7 +290,7 @@ namespace LoginMacro_Form
 
             SendKeys.SendWait("{enter}01{enter}");
 
-            Log_move.Format(strID + ": " + strPlace + "이동완료.");
+            Log_move.Format($"{strID} : {strPlace} 이동완료.");
         }
 
         private void button_CommandDelete_Click(object sender, EventArgs e)
@@ -328,19 +329,19 @@ namespace LoginMacro_Form
 
                 if (iPos >= PLACE.strPLACE.Length)
                 {
-                    Log_move.Format(strID + " 복귀실패 : 장소를 잘못 입력하셨습니다.");
+                    Log_move.Format($"{strID} 복귀실패 : 장소를 잘못 입력하셨습니다.");
                     throw new Exception();
                 }
 
                 ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
 
-                Log_move.Format(strID + ": " + PLACE.strPLACE[iPos] + "에서 복귀시작");
+                Log_move.Format($"{strID} : {PLACE.strPLACE[iPos]} 에서 복귀시작");
 
                 SendKeys.SendWait("04{enter}");
 
                 if (iPos >= 10)
                 {
-                    string str = "9굴" + PLACE.strPLACE[iPos][0] + "{enter}";
+                    string str = $"9굴{PLACE.strPLACE[iPos][0]}"+ "{enter}";
                     SendKeys.SendWait(str);
                 }
                 else

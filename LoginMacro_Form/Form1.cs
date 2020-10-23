@@ -124,6 +124,7 @@ namespace LoginMacro_Form
             try
             {
                 FC.LoadData(ref IDDatas);
+                textBox_IDFilePath.Text = FC.GetIDFilePath();
 
                 foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
                 {
@@ -170,6 +171,7 @@ namespace LoginMacro_Form
                                 bRet = InputInfoProgram(nIndex, nID);
                                 break;
                             case eSeq_Login.LoginFinalCheck:
+                                Thread.Sleep(200);
                                 bRet = !ReconnectCheck(nID);
                                 break;
                             case eSeq_Login.LoginError:
@@ -201,7 +203,7 @@ namespace LoginMacro_Form
                 }
                 finally
                 {
-                    logs.Format(strID + ": 로그인 " + ((bRet) ? "성공" : "실패"));
+                    logs.Format($"{strID} : 로그인 {((bRet) ? "성공" : "실패")} ");
                 }
 
                 Thread_Refresh.Resume();
@@ -218,7 +220,7 @@ namespace LoginMacro_Form
 
                 nID = temp.Id;
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "1.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             { 
@@ -240,7 +242,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.Tab);
                 ProcessControl.keyInput(Keys.Enter, 1500);
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "2.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             {
@@ -259,7 +261,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.Enter, 1000);
 
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "3.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
             catch (Exception e) { logs.Format(e.ToString());  bRet = false; }
 
@@ -274,7 +276,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.A, 100);
                 ProcessControl.keyInput(Keys.Enter, 100);
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "4.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}4.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             {
@@ -324,7 +326,7 @@ namespace LoginMacro_Form
                 do
                 {
                     Image img_capture = ImageProc.ImageCrop(nID, eImagetype.name);
-                    string strFilePath = ImageProc.m_strIDInfo + GetDataGridSelectID(nIndex) + ".bmp";
+                    string strFilePath = $"{ImageProc.m_strIDInfo}{GetDataGridSelectID(nIndex)}.bmp";
 
                     if (File.Exists(strFilePath) == false)
                     {
@@ -360,7 +362,7 @@ namespace LoginMacro_Form
             bool bConnecting = false;
             try
             {
-                string strFilePath = ImageProc.m_strLogin + "6.bmp";
+                string strFilePath = $"{ImageProc.m_strLogin}6.bmp";
                 Image img_Connecting = ImageProc.ImageCrop(nID, eImagetype.isconnected);
                 bConnecting = ImageProc.ImageCompare(strFilePath, new Bitmap(img_Connecting));
 
@@ -378,7 +380,7 @@ namespace LoginMacro_Form
             try
             {
                 Image img_capture = ImageProc.ImageCrop(nID, eImagetype.total);
-                string strFilePath = ImageProc.m_strLogin + "연결해제.bmp";
+                string strFilePath = $"{ImageProc.m_strLogin}연결해제.bmp";
 
 
                 bReconnect = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));                    
@@ -640,7 +642,7 @@ namespace LoginMacro_Form
 
                 if (IDDatas.getDataTable().ContainsKey(strID))
                 {
-                    logs.Format(strID + " 가 현재 저장되어있습니다.");
+                    logs.Format($"{strID} 가 현재 저장되어있습니다.");
                 }
 
                 if (strID == "" || strPW == "")

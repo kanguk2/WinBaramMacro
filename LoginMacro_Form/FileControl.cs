@@ -14,15 +14,24 @@ namespace LoginMacro_Form
 {
     class FileControl
     {
-        string strFilePath;
-        string strFileName_ID;
-        string strFileName_Command;
+        private string strFileName_ID;
+        private string strFileName_Command;
+
+        private const string strRegSubKey = "FilePath";
 
         public FileControl()
         {
-            //Default Value
-            strFileName_ID = "D:\\Kanguk\\Game\\IDDatas.json";
-            strFileName_Command = "D:\\Kanguk\\Game\\CommandDatas.json";
+            strFileName_ID = RegistryControl.readReg(strRegSubKey, "ID");
+            if (strFileName_ID == "")
+            {
+                strFileName_ID = "D:\\Kanguk\\Game\\IDDatas.json";
+            }
+
+            strFileName_Command = RegistryControl.readReg(strRegSubKey, "Command");
+            if (strFileName_Command == "")
+            {
+                strFileName_Command = "D:\\Kanguk\\Game\\CommandDatas.json";
+            }
         }
 
         public void ChangeFileID(string strID)
@@ -35,6 +44,10 @@ namespace LoginMacro_Form
             strFileName_Command = strCommand;
         }
 
+        public string GetIDFilePath()
+        {
+            return strFileName_ID;
+        }
 
         public void LoadData(ref IDData_KANG idData)
         {
@@ -54,6 +67,8 @@ namespace LoginMacro_Form
 
                     idData.Add(data.Key, tmp);
                 }
+
+                RegistryControl.writeReg(strRegSubKey, "ID", strFileName_ID);
             }
             catch(Exception e)
             {
@@ -92,6 +107,8 @@ namespace LoginMacro_Form
                 string json = File.ReadAllText(strFullPath);
 
                 commanddatas = JsonConvert.DeserializeObject<List<CommandDatas>>(json);
+
+                RegistryControl.writeReg(strRegSubKey, "Command", strFileName_Command);
             }
             catch(Exception e)
             {
