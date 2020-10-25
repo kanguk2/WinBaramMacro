@@ -20,7 +20,7 @@ namespace LoginMacro_Form
 
         private ManualResetEvent Event_Log = new ManualResetEvent(true);
 
-        private Log Log_move;
+        private Log log_Img;
         public ImageControlForm(ref IDData_KANG IDDatas)
         {
             this.IDDatas = IDDatas;
@@ -28,7 +28,7 @@ namespace LoginMacro_Form
 
             InitGridView();
 
-            Log_move = new Log(ref textBox_Log);
+            log_Img = new Log(ref textBox_Log);
         }
 
         public void InitGridView()
@@ -75,15 +75,15 @@ namespace LoginMacro_Form
                 if (new FileInfo(strFilePath).Exists == false)
                 {
                     new Bitmap(img).Save(strFilePath);
-                    Log_move.Format("file : " + strFilePath + "저장하였습니다.");
+                    log_Img.Format("file : " + strFilePath + "저장하였습니다.");
                 }
                 else
-                    Log_move.Format("file : " + strFilePath + "가 존재합니다.");
+                    log_Img.Format("file : " + strFilePath + "가 존재합니다.");
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                log_Img.Format(ex.ToString());
             }
         }
 
@@ -98,7 +98,7 @@ namespace LoginMacro_Form
 
                 if (new FileInfo(strFilePath).Exists == false)
                 {
-                    Log_move.Format("file : " + strFilePath + "가 없습니다.");
+                    log_Img.Format("file : " + strFilePath + "가 없습니다.");
                     throw new Exception();
                 }
                 else
@@ -107,7 +107,7 @@ namespace LoginMacro_Form
                 string str = "File : " + strFilePath + " 와 Process ID" + GetDataGridSelectID(dataGridView1_IDInfo.CurrentCell.RowIndex) + "와 비교 "
                                 + (bEqual ? "같다" : "다르다");
 
-                Log_move.Format(str);
+                log_Img.Format(str);
 
             }
             catch (Exception ex){ }
@@ -122,7 +122,7 @@ namespace LoginMacro_Form
                 string strFilePath = ImageProc.m_strFilePath + GetDataGridSelectID(dataGridView1_IDInfo.CurrentCell.RowIndex) + ".bmp";
 
                 if (new FileInfo(strFilePath).Exists == false)
-                    Log_move.Format("file : " + strFilePath + "가 없습니다.");
+                    log_Img.Format("file : " + strFilePath + "가 없습니다.");
                 else
                     bCheck = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));
             }
@@ -147,7 +147,7 @@ namespace LoginMacro_Form
                         {
                             ProcessControl.KillProcess(nID);
                             IDDatas.getDataTable()[data.Key].nPID = -1;
-                            Log_move.Format(data.Key.ToString() + "연결해제로 프로세스 종료함.");
+                            log_Img.Format(data.Key.ToString() + "연결해제로 프로세스 종료함.");
                         }
                     }
                 }
@@ -167,13 +167,13 @@ namespace LoginMacro_Form
                 string strFilePath = ImageProc.m_strFilePath + "연결해제.bmp";
 
                 if (new FileInfo(strFilePath).Exists == false)
-                    Log_move.Format("file : " + strFilePath + "가 없습니다.");
+                    log_Img.Format("file : " + strFilePath + "가 없습니다.");
                 else
                     bCheck = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                log_Img.Format(e.ToString());
             }
             return bCheck;
         }
@@ -183,7 +183,7 @@ namespace LoginMacro_Form
             {
                 return dataGridView1_IDInfo.Rows[nSel].Cells["ID"].Value.ToString();
             }
-            catch (Exception) { }
+            catch (Exception e) { log_Img.Format(e.ToString()) ; }
 
             return null;
         }
@@ -195,7 +195,7 @@ namespace LoginMacro_Form
                 string strID = dataGridView1_IDInfo.Rows[nSel].Cells["ID"].Value.ToString();
                 return IDDatas.getDataTable()[strID].nPID;
             }
-            catch (Exception) { }
+            catch (Exception e) { log_Img.Format(e.ToString()); }
 
             return -1;
         }   

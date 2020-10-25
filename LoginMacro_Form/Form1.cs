@@ -28,6 +28,8 @@ namespace LoginMacro_Form
         private Thread Thread_MultiLE;
         private Thread Thread_Refresh;
         private Log logs;
+
+        private MovementForm Form_MF;
         public Form1()
         {
             InitializeComponent();
@@ -369,9 +371,26 @@ namespace LoginMacro_Form
 
         private void ChangeTextRow(int nIndex, Boolean bConnect)
         {
-            IDDataTable.Columns["STATE"].ReadOnly = false;
-            IDDataTable.Rows[nIndex]["STATE"] = bConnect ? "연결됨" : "연결안됨";
-            IDDataTable.Columns["STATE"].ReadOnly = true;
+            if (this.InvokeRequired == false)
+            {
+                IDDataTable.Columns["STATE"].ReadOnly = false;
+                IDDataTable.Rows[nIndex]["STATE"] = bConnect ? "연결됨" : "연결안됨";
+                IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].strSTATE = bConnect ? "연결됨" : "연결안됨";
+                IDDataTable.Columns["STATE"].ReadOnly = true;
+
+                if (Form_MF != null && Form_MF.IsHandleCreated == true)
+                {
+                    Form_MF.Init_IDRow();
+                }
+            }
+            else
+            {
+                var d =
+                    Invoke((MethodInvoker)delegate () {
+                        ChangeTextRow(nIndex, bConnect);
+                    });
+            }
+>>>>>>> Stashed changes
         }
 
         private void ThreadMultiExecute()
@@ -430,13 +449,20 @@ namespace LoginMacro_Form
             {
                 Datas tmp_data = IDDatas.getDataTable()[IDDataTable.Rows[nIndex]["ID"].ToString()];
 
-                Boolean bCheck = ProcessControl.CheckProcess(tmp_data.nPID);
+                //현재 Process Check.
+                bool bCheck = ProcessControl.CheckProcess(tmp_data.nPID);
 
-                ChangeTextRow(nIndex, bCheck);
+                //이전 Process Check.
+                bool preProcessCheck = (IDDataTable.Rows[nIndex]["STATE"] == "연결됨");
 
-                if (bCheck == false)
+                if (bCheck != preProcessCheck)
                 {
-                    IDDatas.getDataTable()[IDDataTable.Rows[nIndex]["ID"].ToString()].nPID = -1;
+                    ChangeTextRow(nIndex, bCheck);
+
+                    if (bCheck == false)
+                    {
+                        IDDatas.getDataTable()[IDDataTable.Rows[nIndex]["ID"].ToString()].nPID = -1;
+                    }
                 }
             }
             catch (Exception){ }
@@ -546,9 +572,19 @@ namespace LoginMacro_Form
 
         private void button_Movement_Click(object sender, EventArgs e)
         {
-            MovementForm Form_MF = new MovementForm(ref IDDatas);
+            if (Form_MF != null && Form_MF.IsHandleCreated == true)
+            {
+                ProcessControl.ForegroundProcess(Form_MF.Handle);
+                return;
+            }
 
+            Form_MF = new MovementForm(ref IDDatas);
             Form_MF.Show();
+        }
+
+        private void Form_MFClosedEvent(object sender, FormClosedEventArgs e)
+        {
+            
         }
 
         private void button_IDDataSave_Click(object sender, EventArgs e)

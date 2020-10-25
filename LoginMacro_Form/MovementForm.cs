@@ -45,6 +45,7 @@ namespace LoginMacro_Form
             BTDisplay.UseColumnTextForButtonValue = true;
 
             dataGridView_IDInfo.CellClick += new DataGridViewCellEventHandler(BTDisplay_Click);
+<<<<<<< Updated upstream
 
             
             try
@@ -60,6 +61,9 @@ namespace LoginMacro_Form
                 MessageBox.Show(e.Message.ToString());
             }
 
+=======
+            Init_IDRow();
+>>>>>>> Stashed changes
             this.dataGridView_IDInfo.DataSource = this.IDDataTable;
 
             this.dataGridView_IDInfo.Columns.Add(BTDisplay);
@@ -134,6 +138,56 @@ namespace LoginMacro_Form
             }
         }
 
+<<<<<<< Updated upstream
+=======
+        public void Init_IDRow()
+        {
+            if (this.InvokeRequired == false)
+            {
+                try
+                {
+                    IDDataTable.Clear();
+                    foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
+                    {
+                        if (items.Value.nPID != -1)
+                            IDDataTable.Rows.Add(items.Key, items.Value.nGroup);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log_move.Format(e.Message.ToString());
+                }
+            }
+            else
+            {
+                var d =
+                    Invoke((MethodInvoker)delegate () {
+                        Init_IDRow();
+                    });
+            }
+        }
+        
+        private void Init_CommandRow()
+        {
+            try
+            {
+                this.CommandDataTable.Clear();
+
+                if (FC.LoadData(ref commanddatas) == true)
+                {
+                    foreach (CommandDatas data in commanddatas)
+                    {
+                        CommandDataTable.Rows.Add(data.strCommand);
+                    }
+                }
+                else
+                    commanddatas = new List<CommandDatas>();
+            }
+            catch(Exception e) { Log_move.Format(e.ToString()); }            
+        }
+
+
+>>>>>>> Stashed changes
         private void CommandInput(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -198,7 +252,6 @@ namespace LoginMacro_Form
 
             Log_move.Format(strID + ": " + strInput + "수행");
         }
-
 
         public string GetDataGridSelectID(int nSel)
         {
@@ -352,10 +405,14 @@ namespace LoginMacro_Form
             }
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
+            Thread.Sleep(200);
             if (iPos >= 10)
             {
+<<<<<<< Updated upstream
                 SendKeys.SendWait("ZX");
+=======
+                SendKeys.SendWait("01{enter}ZX");
+>>>>>>> Stashed changes
                 iPos -= 10;
             }
 
