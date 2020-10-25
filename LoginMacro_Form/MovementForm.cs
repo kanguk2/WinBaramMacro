@@ -18,7 +18,7 @@ namespace LoginMacro_Form
         private FileControl FC;
         private DataTable IDDataTable = new DataTable();
         private DataTable CommandDataTable = new DataTable();
-        private List<CommandDatas> commanddatas;
+        private List<CommandDatas> commanddatas = new List<CommandDatas>();
 
         private Log Log_move;
 
@@ -96,18 +96,11 @@ namespace LoginMacro_Form
 
                 foreach (string strID in this.IDDatas.getDataTable().Keys)
                     cCell.Items.Add(strID);
-
-                if (FC.LoadData(ref commanddatas) == true)
-                {
-                    foreach (CommandDatas data in commanddatas)
-                    {
-                        CommandDataTable.Rows.Add(data.strCommand);
-                    }
-                }
-                else
-                    commanddatas = new List<CommandDatas>();
                 
                 this.dataGridView_Command.DataSource = this.CommandDataTable;
+
+                Init_CommandRow();
+
                 dataGridView_Command.Columns.Add(BTSingle);
                 dataGridView_Command.CellClick += new DataGridViewCellEventHandler(CommandInput);
                 dataGridView_Command.Columns.Add(cCell);
@@ -118,9 +111,29 @@ namespace LoginMacro_Form
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message.ToString());
+                Log_move.Format(e.Message.ToString());
             }
         }
+
+        private void Init_CommandRow()
+        {
+            try
+            {
+                this.CommandDataTable.Clear();
+
+                if (FC.LoadData(ref commanddatas) == true)
+                {
+                    foreach (CommandDatas data in commanddatas)
+                    {
+                        CommandDataTable.Rows.Add(data.strCommand);
+                    }
+                }
+                else
+                    commanddatas = new List<CommandDatas>();
+            }
+            catch (Exception e) { Log_move.Format(e.ToString()); }
+        }
+
 
         public void Init_IDRow()
         {
@@ -147,25 +160,6 @@ namespace LoginMacro_Form
                         Init_IDRow();
                     });
             }
-        }
-        
-        private void Init_CommandRow()
-        {
-            try
-            {
-                this.CommandDataTable.Clear();
-
-                if (FC.LoadData(ref commanddatas) == true)
-                {
-                    foreach (CommandDatas data in commanddatas)
-                    {
-                        CommandDataTable.Rows.Add(data.strCommand);
-                    }
-                }
-                else
-                    commanddatas = new List<CommandDatas>();
-            }
-            catch(Exception e) { Log_move.Format(e.ToString()); }            
         }
 
 
@@ -422,7 +416,37 @@ namespace LoginMacro_Form
 
         private void button_IDDataLoad_Click(object sender, EventArgs e)
         {
+            string strFileFullName = FileControl.getFilePathFromDialog();
 
+            if (strFileFullName == null)
+                return;
+
+            CommandDataTable.Rows.Clear();
+
+            FC.ChangeFileCommand(strFileFullName);
+            Init_CommandRow();
+        }
+
+        private void button_AddCommand_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int nIndex = CommandDataTable.Rows.Count - 1;
+
+                string strCommand;
+                strCommand = CommandDataTable.Rows[nIndex]["명령어"].ToString();
+
+                if (strCommand == "" || stringParser.CommandJudge(strCommand) == false)
+                {
+                    MessageBox.Show("명령어를 다시 확인해주세요.");
+                    return;
+                }
+                commanddatas.Add(new CommandDatas { strCommand = strCommand });
+            }
+            catch (Exception ex)
+            {
+                Log_move.Format(ex.ToString());
+            }
         }
     }
 }

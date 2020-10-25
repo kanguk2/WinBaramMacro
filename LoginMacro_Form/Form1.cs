@@ -108,8 +108,9 @@ namespace LoginMacro_Form
             IDDataTable.Columns.Add("STATE");
             IDDataTable.Columns["STATE"].ReadOnly = true;
             IDDataTable.Columns.Add("GROUP", typeof(int));
-            FC.LoadData(ref IDDatas);
-            InitRow();
+
+            InitIDInfoRow();
+
             this.dataGridView_Info.DataSource = this.IDDataTable;
             this.dataGridView_Info.Columns["GROUP"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 
@@ -120,10 +121,12 @@ namespace LoginMacro_Form
             dataGridView_Info.CellClick += new DataGridViewCellEventHandler(SingleKillProcess);
         }
 
-        private void InitRow()
+        private void InitIDInfoRow()
         {
             try
             {
+                FC.LoadData(ref IDDatas);
+                textBox_IDFilePath.Text = FC.GetIDFilePath();
                 foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
                 {
                     IDDataTable.Rows.Add(items.Key, items.Value.strPW, items.Value.strSTATE, items.Value.nGroup);
@@ -169,7 +172,8 @@ namespace LoginMacro_Form
                                 bRet = InputInfoProgram(nIndex, nID);
                                 break;
                             case eSeq_Login.LoginFinalCheck:
-//                                bRet =;
+                                Thread.Sleep(200);
+                                bRet = !ReconnectCheck(nID);
                                 break;
                             case eSeq_Login.LoginError:
                                 throw new Exception(strError);
@@ -209,7 +213,8 @@ namespace LoginMacro_Form
                 }
                 finally
                 {
-                    logs.Format(strID + ": 로그인 " + ((bRet) ? "성공" : "실패"));
+
+                    logs.Format($"{strID} : 로그인 {((bRet) ? "성공" : "실패")}");
                 }
 
                 Thread_Refresh.Resume();
@@ -226,7 +231,7 @@ namespace LoginMacro_Form
 
                 nID = temp.Id;
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "1.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             { 
@@ -249,7 +254,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.Tab);
                 ProcessControl.keyInput(Keys.Enter, 1500);
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "2.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             {
@@ -268,7 +273,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.Enter, 1000);
 
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "3.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
             catch (Exception e) { logs.Format(e.ToString());  bRet = false; }
 
@@ -283,7 +288,7 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.A, 100);
                 ProcessControl.keyInput(Keys.Enter, 100);
 
-                bRet = ImageCompareSeq(ImageProc.m_strLogin + "4.bmp", eImagetype.total, nID);
+                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}4.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             {
@@ -333,8 +338,7 @@ namespace LoginMacro_Form
                 do
                 {
                     Image img_capture = ImageProc.ImageCrop(nID, eImagetype.name);
-                    string strFilePath = ImageProc.m_strIDInfo + GetDataGridSelectID(nIndex) + ".bmp";
-
+                    string strFilePath = $"{ImageProc.m_strIDInfo}{GetDataGridSelectID(nIndex)}.bmp";
                     if (File.Exists(strFilePath) == false)
                     {
                         logs.Format("이미지 없음 저장필요");
@@ -364,12 +368,27 @@ namespace LoginMacro_Form
             return bRet;
         }
 
+        private bool ReconnectCheck(int nID)
+        {
+            bool bReconnect = true;
+            try
+            {
+                Image img_capture = ImageProc.ImageCrop(nID, eImagetype.total);
+                string strFilePath = $"{ImageProc.m_strLogin}연결해제.bmp";
+
+                bReconnect = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));
+            }
+            catch (Exception e) { logs.Format(e.ToString()); }
+
+            return bReconnect;
+        }
+
         private void Connectingcheck(int nID)
         {
             bool bConnecting = false;
             try
             {
-                string strFilePath = ImageProc.m_strLogin + "6.bmp";
+                string strFilePath = $"{ImageProc.m_strLogin}6.bmp";
                 Image img_Connecting = ImageProc.ImageCrop(nID, eImagetype.isconnected);
                 bConnecting = ImageProc.ImageCompare(strFilePath, new Bitmap(img_Connecting));
 
@@ -626,14 +645,53 @@ namespace LoginMacro_Form
 
         private void button_IDDataLoad_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string strFileFullName = FileControl.getFilePathFromDialog();
 
+                if (strFileFullName == null)
+                    return;
+
+                IDDataTable.Rows.Clear();
+
+                FC.ChangeFileID(strFileFullName);
+
+                InitIDInfoRow();
+            }
+            catch (Exception ex) { logs.Format(ex.ToString()); }
         }
 
         private void button_AddID_Click(object sender, EventArgs e)
         {
             try
             {
-                
+                int nIndex = IDDataTable.Rows.Count - 1;
+
+                string strID, strPW, strGroup;
+
+                strID = IDDataTable.Rows[nIndex]["ID"].ToString();
+                strPW = IDDataTable.Rows[nIndex]["PW"].ToString();
+
+                if (IDDatas.getDataTable().ContainsKey(strID))
+                {
+                    logs.Format(strID + " 가 현재 저장되어있습니다.");
+                }
+
+                if (strID == "" || strPW == "")
+                {
+                    MessageBox.Show("정보를 잘못입력하셨습니다.");
+                    return;
+                }
+
+                strGroup = IDDataTable.Rows[nIndex]["GROUP"].ToString();
+
+                if (strGroup == "")
+                {
+                    IDDataTable.Rows[nIndex]["GROUP"] = "0";
+                    strGroup = "0";
+                }
+
+                IDDatas.Add(strID, new Datas { strPW = strPW, strSTATE = "연결안됨", nPID = -1, nGroup = int.Parse(strGroup) });
             }
             catch(Exception ex)
             {
@@ -675,10 +733,25 @@ namespace LoginMacro_Form
             }
         }
 
+
         private void button_IDDelete_Click(object sender, EventArgs e)
         {
-
+            FuncIDDelete(dataGridView_Info.CurrentCell.RowIndex);
         }
+
+        private void FuncIDDelete(int nIndex)
+        {
+            try
+            {
+                IDDatas.Delete(GetDataGridSelectID(nIndex));
+                IDDataTable.Rows.RemoveAt(nIndex);
+            }
+            catch (Exception ex)
+            {
+                logs.Format(ex.ToString());
+            }
+        }
+
     }
 }
     
