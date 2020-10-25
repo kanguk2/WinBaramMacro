@@ -14,27 +14,48 @@ namespace LoginMacro_Form
 {
     class FileControl
     {
-        string strFilePath;
-        string strFileName_ID;
-        string strFileName_Command;
+        private string strFileName_ID;
+        private string strFileName_Command;
+
+        private const string strRegSubKey = "FilePath";
 
         public FileControl()
         {
-            //Default Value
-            strFilePath = "D:\\Kanguk\\Game";
-            strFileName_ID = "IDDatas.json";
-            strFileName_Command = "CommandDatas.json";
+            strFileName_ID = RegistryControl.readReg(strRegSubKey, "ID");
+            if (strFileName_ID == "")
+            {
+                strFileName_ID = "D:\\Kanguk\\Game\\IDDatas.json";
+            }
+
+            strFileName_Command = RegistryControl.readReg(strRegSubKey, "Command");
+            if (strFileName_Command == "")
+            {
+                strFileName_Command = "D:\\Kanguk\\Game\\CommandDatas.json";
+            }
         }
 
-        public void ChangeFilePath(string FilePath)
+        public void ChangeFileID(string strID)
         {
-            this.strFilePath = FilePath;
+            strFileName_ID = strID;
         }
+
+        public void ChangeFileCommand(string strCommand)
+        {
+            strFileName_Command = strCommand;
+        }
+
+        public string GetIDFilePath()
+        {
+            return strFileName_ID;
+        }
+
         public void LoadData(ref IDData_KANG idData)
         {
             try
             {
-                string json = File.ReadAllText(strFilePath + "\\" + strFileName_ID);
+                idData.getDataTable().Clear();
+
+                string json = File.ReadAllText(strFileName_ID);
 
                 JObject applyJObj = JObject.Parse(json);
 
@@ -46,6 +67,8 @@ namespace LoginMacro_Form
 
                     idData.Add(data.Key, tmp);
                 }
+
+                RegistryControl.writeReg(strRegSubKey, "ID", strFileName_ID);
             }
             catch(Exception e)
             {
@@ -60,8 +83,7 @@ namespace LoginMacro_Form
             {
                 string json = JsonConvert.SerializeObject(iDData.getDataTable(), Newtonsoft.Json.Formatting.Indented);
 
-                File.WriteAllText(strFilePath + "\\" + strFileName_ID, json);
-
+                File.WriteAllText(strFileName_ID, json);
             }
             catch (Exception)
             {
@@ -74,7 +96,9 @@ namespace LoginMacro_Form
             bool bRet = true;
             try
             {
-                string strFullPath = strFilePath + "\\" + strFileName_Command;
+                commanddatas.Clear();
+
+                string strFullPath = strFileName_Command;
 
                 if (File.Exists(strFullPath) == false)
                 {
@@ -83,14 +107,8 @@ namespace LoginMacro_Form
                 string json = File.ReadAllText(strFullPath);
 
                 commanddatas = JsonConvert.DeserializeObject<List<CommandDatas>>(json);
-/*
-                foreach (var data in applyJObj)
-                {
-                    CommandDatas tmp = new CommandDatas { strCommand = data.Value["strCommand"].ToString() };
 
-                    commanddatas.Add(tmp);
-                }
-*/
+                RegistryControl.writeReg(strRegSubKey, "Command", strFileName_Command);
             }
             catch(Exception e)
             {
@@ -107,7 +125,7 @@ namespace LoginMacro_Form
             {
                 string json = JsonConvert.SerializeObject(commanddatas, Newtonsoft.Json.Formatting.Indented);
 
-                File.WriteAllText(strFilePath + "\\" + strFileName_Command, json);
+                File.WriteAllText(strFileName_Command, json);
 
             }
             catch (Exception)

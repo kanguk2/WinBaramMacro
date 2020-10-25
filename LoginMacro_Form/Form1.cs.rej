@@ -1,0 +1,9 @@
+diff a/LoginMacro_Form/Form1.cs b/LoginMacro_Form/Form1.cs	(rejected hunks)
+@@ -496,7 +496,6 @@
+                     ProcessControl.Display(IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID);
+                 else
+                 {
+-                    Thread_LE = new Thread(() => ThreadNewSequence(nIndex, true));
+                     Thread_LE = new Thread(() => ThreadNewSequence(nIndex, eSeq_Login.LoginExecute, true));
+                     Thread_LE.Start();
+                 }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -45,25 +46,8 @@ namespace LoginMacro_Form
             BTDisplay.UseColumnTextForButtonValue = true;
 
             dataGridView_IDInfo.CellClick += new DataGridViewCellEventHandler(BTDisplay_Click);
-<<<<<<< Updated upstream
 
-            
-            try
-            {
-                foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
-                {
-                    if(items.Value.strSTATE == "연결됨")
-                        IDDataTable.Rows.Add(items.Key, items.Value.nGroup);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message.ToString());
-            }
-
-=======
             Init_IDRow();
->>>>>>> Stashed changes
             this.dataGridView_IDInfo.DataSource = this.IDDataTable;
 
             this.dataGridView_IDInfo.Columns.Add(BTDisplay);
@@ -138,8 +122,6 @@ namespace LoginMacro_Form
             }
         }
 
-<<<<<<< Updated upstream
-=======
         public void Init_IDRow()
         {
             if (this.InvokeRequired == false)
@@ -187,7 +169,6 @@ namespace LoginMacro_Form
         }
 
 
->>>>>>> Stashed changes
         private void CommandInput(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -200,26 +181,6 @@ namespace LoginMacro_Form
 
 
                 CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
-/*
-                string strInput = dataGridView_Command.Rows[nIndex].Cells["명령어"].Value.ToString();
-
-                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
-                string[] inputs = stringParser.ParserSpecial(strInput);
-
-                foreach(string input in inputs)
-                {
-                    if (input == "")
-                        continue;
-
-                    if (input.ToUpper() == "enter".ToUpper())
-                        ProcessControl.keyInput(Keys.Enter, 100);
-                    else
-                        SendKeys.SendWait(input);
-                }
-
-                Log_move.Format(strID + ": " + strInput + "수행");
-*/
                 //This is the code which will show the button click row data. Thank you.
             }
             catch (Exception ex)
@@ -237,18 +198,7 @@ namespace LoginMacro_Form
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
 
-            string[] inputs = stringParser.ParserSpecial(strInput);
-
-            foreach (string input in inputs)
-            {
-                if (input == "")
-                    continue;
-
-                if (input.ToUpper() == "enter".ToUpper())
-                    ProcessControl.keyInput(Keys.Enter, 100);
-                else
-                    SendKeys.SendWait(input);
-            }
+            SendKeys.SendWait(strInput);
 
             Log_move.Format(strID + ": " + strInput + "수행");
         }
@@ -336,47 +286,6 @@ namespace LoginMacro_Form
 
                     eventMove(nIndex);
                 }
-/*
-                int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
-                string strID = GetDataGridSelectID(nIdIndex);
-
-                string strPlace = textBox_place.Text;
-
-                int iPos = 0;
-                for(iPos = 0; iPos < PLACE.strPLACE.Length; iPos++)
-                {
-                    if (strPlace == PLACE.strPLACE[iPos])
-                        break;
-                }
-
-                if (iPos == PLACE.strPLACE.Length)
-                {
-                    MessageBox.Show("잘못 입력하셨습니다.");
-                    throw new Exception();
-                }
-
-                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
-
-                if (iPos >= 10)
-                {
-                    SendKeys.SendWait("ZX");
-                    iPos -= 10;
-                }
-
-                ProcessControl.keyInput(Keys.Enter,100);
-                SendKeys.SendWait("귀환");
-                ProcessControl.keyInput(Keys.Enter,300);
-
-                for(int i=0; i<iPos+1; i++)
-                {
-                    ProcessControl.keyInput(Keys.Down, 10);
-                }
-                ProcessControl.keyInput(Keys.Enter, 300);
-
-                SendKeys.SendWait("01");
-                ProcessControl.keyInput(Keys.Enter);
-
-                Log_move.Format(strID + ": " + strPlace + "이동완료.");*/
             }
             catch (Exception ex)
             {
@@ -406,19 +315,16 @@ namespace LoginMacro_Form
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
             Thread.Sleep(200);
+
             if (iPos >= 10)
             {
-<<<<<<< Updated upstream
-                SendKeys.SendWait("ZX");
-=======
+
                 SendKeys.SendWait("01{enter}ZX");
->>>>>>> Stashed changes
                 iPos -= 10;
             }
 
-            ProcessControl.keyInput(Keys.Enter, 100);
-            SendKeys.SendWait("귀환");
-            ProcessControl.keyInput(Keys.Enter, 300);
+            SendKeys.SendWait("{enter}귀환{enter}");
+            Thread.Sleep(200);
 
             for (int i = 0; i < iPos + 1; i++)
             {
@@ -426,8 +332,7 @@ namespace LoginMacro_Form
             }
             ProcessControl.keyInput(Keys.Enter, 300);
 
-            SendKeys.SendWait("01");
-            ProcessControl.keyInput(Keys.Enter);
+            SendKeys.SendWait("01{enter}");
 
             Log_move.Format(strID + ": " + strPlace + "이동완료.");
         }
@@ -486,8 +391,7 @@ namespace LoginMacro_Form
                 }
                 else
                 {
-                    SendKeys.SendWait("9조그만삐삐");
-                    ProcessControl.keyInput(Keys.Enter, 300);
+                    SendKeys.SendWait("9조그만삐삐{enter}");
                 }
             }
             catch (Exception ex)
@@ -514,6 +418,11 @@ namespace LoginMacro_Form
             catch (Exception)
             {
             }
+        }
+
+        private void button_IDDataLoad_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

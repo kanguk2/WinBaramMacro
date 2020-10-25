@@ -30,7 +30,7 @@
         {
             this.dataGridView_Command = new System.Windows.Forms.DataGridView();
             this.dataGridView_IDInfo = new System.Windows.Forms.DataGridView();
-            this.button_AddID = new System.Windows.Forms.Button();
+            this.button_AddCommand = new System.Windows.Forms.Button();
             this.button_IDDataLoad = new System.Windows.Forms.Button();
             this.button_IDDataSave = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -63,16 +63,15 @@
             this.dataGridView_IDInfo.Size = new System.Drawing.Size(252, 303);
             this.dataGridView_IDInfo.TabIndex = 18;
             // 
-            // button_AddID
+            // button_AddCommand
             // 
-            this.button_AddID.Location = new System.Drawing.Point(426, 331);
-            this.button_AddID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button_AddID.Name = "button_AddID";
-            this.button_AddID.Size = new System.Drawing.Size(72, 34);
-            this.button_AddID.TabIndex = 21;
-            this.button_AddID.Text = "추가";
-            this.button_AddID.UseVisualStyleBackColor = true;
-            this.button_AddID.Click += new System.EventHandler(this.button_AddID_Click);
+            this.button_AddCommand.Location = new System.Drawing.Point(426, 331);
+            this.button_AddCommand.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_AddCommand.Name = "button_AddCommand";
+            this.button_AddCommand.Size = new System.Drawing.Size(72, 34);
+            this.button_AddCommand.TabIndex = 21;
+            this.button_AddCommand.Text = "추가";
+            this.button_AddCommand.UseVisualStyleBackColor = true;
             // 
             // button_IDDataLoad
             // 
@@ -83,6 +82,7 @@
             this.button_IDDataLoad.TabIndex = 20;
             this.button_IDDataLoad.Text = "불러오기";
             this.button_IDDataLoad.UseVisualStyleBackColor = true;
+            this.button_IDDataLoad.Click += new System.EventHandler(this.button_IDDataLoad_Click);
             // 
             // button_IDDataSave
             // 
@@ -186,7 +186,7 @@
             this.Controls.Add(this.textBox_Log);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button_AddID);
+            this.Controls.Add(this.button_AddCommand);
             this.Controls.Add(this.button_IDDataLoad);
             this.Controls.Add(this.button_IDDataSave);
             this.Controls.Add(this.dataGridView_IDInfo);
@@ -204,7 +204,7 @@
 
         private System.Windows.Forms.DataGridView dataGridView_Command;
         private System.Windows.Forms.DataGridView dataGridView_IDInfo;
-        private System.Windows.Forms.Button button_AddID;
+        private System.Windows.Forms.Button button_AddCommand;
         private System.Windows.Forms.Button button_IDDataLoad;
         private System.Windows.Forms.Button button_IDDataSave;
         private System.Windows.Forms.Label label1;

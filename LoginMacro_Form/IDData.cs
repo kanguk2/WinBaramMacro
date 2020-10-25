@@ -37,8 +37,6 @@ namespace LoginMacro_Form
             set;
             get;
         }
-
-        public Rect rect;
         public int nGroup
         {
             set;

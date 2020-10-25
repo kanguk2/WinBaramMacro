@@ -16,8 +16,7 @@ namespace LoginMacro_Form
         public static string m_strIDInfo = m_strFilePath + "IDInfo\\";
         public static string m_strLogin = m_strFilePath + "Login\\";
 
-
-        public ImageProc()
+        static ImageProc()
         {
             List_Rect.Add(new Rectangle(new System.Drawing.Point(495, 400), new System.Drawing.Size(85, 15)));
             List_Rect.Add(new Rectangle(new System.Drawing.Point(538, 428), new System.Drawing.Size(90, 12)));

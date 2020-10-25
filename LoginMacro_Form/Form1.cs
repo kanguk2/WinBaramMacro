@@ -30,6 +30,7 @@ namespace LoginMacro_Form
         private Log logs;
 
         private MovementForm Form_MF;
+
         public Form1()
         {
             InitializeComponent();
@@ -134,7 +135,7 @@ namespace LoginMacro_Form
             }
         }
 
-        public void ThreadNewSequence(int nIndex, Boolean bSingle = false)
+        public void ThreadNewSequence(int nIndex, eSeq_Login eSL = eSeq_Login.LoginExecute, Boolean bSingle = false)
         {
             lock (lockObject)
             {
@@ -144,9 +145,9 @@ namespace LoginMacro_Form
 
                 int nID = -1;
                 bool bRet = true;
+                int nTry = 0;
                 try
                 {
-                    eSeq_Login eSL = eSeq_Login.LoginExecute;
                     string strError = "Error!! : ";
                     while (eSL != eSeq_Login.LoginComplete)
                     {
@@ -167,14 +168,27 @@ namespace LoginMacro_Form
                             case eSeq_Login.LoginInputInfo:
                                 bRet = InputInfoProgram(nIndex, nID);
                                 break;
+                            case eSeq_Login.LoginFinalCheck:
+//                                bRet =;
+                                break;
                             case eSeq_Login.LoginError:
                                 throw new Exception(strError);
                         }
                         if (bRet == false)
                         {
-                            strError += eSL.ToString();
-                            eSL = eSeq_Login.LoginError;
-                            ProcessControl.KillProcess(nID);
+                            if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
+                            {
+                                Thread.Sleep(1000);
+                                eSL = eSeq_Login.LoginSelectServer;
+                                logs.Format($"{strID} : Reconnect 확인 재시도..");
+                            }
+
+                            else
+                            {
+                                strError += eSL.ToString();
+                                eSL = eSeq_Login.LoginError;
+                                ProcessControl.KillProcess(nID);
+                            }
                         }
                         else
                             eSL++;
@@ -184,7 +198,6 @@ namespace LoginMacro_Form
                     {
                         IDDatas.getDataTable()[strID].nPID = nID;
                         DataTableToDicData();
-                        FC.SaveData(IDDatas);
 
                         ProcessControl.MiniMizedProcess(nID);
                     }
@@ -390,7 +403,6 @@ namespace LoginMacro_Form
                         ChangeTextRow(nIndex, bConnect);
                     });
             }
->>>>>>> Stashed changes
         }
 
         private void ThreadMultiExecute()
@@ -481,7 +493,7 @@ namespace LoginMacro_Form
                     ProcessControl.Display(IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID);
                 else
                 {
-                    Thread_LE = new Thread(() => ThreadNewSequence(nIndex, true));
+                    Thread_LE = new Thread(() => ThreadNewSequence(nIndex, eSeq_Login.LoginExecute, true));
                     Thread_LE.Start();
                 }
                 //This is the code which will show the button click row data. Thank you.
@@ -558,9 +570,7 @@ namespace LoginMacro_Form
   
         private void button_test_Click(object sender, EventArgs e)
         {
-            int nSel = dataGridView_Info.CurrentCell.RowIndex;
-
-            ThreadNewSequence(nSel , true);
+  
         }
 
         private void button_FornIC_Click(object sender, EventArgs e)
@@ -663,6 +673,11 @@ namespace LoginMacro_Form
             {
                 logs.Format(ex.ToString());
             }
+        }
+
+        private void button_IDDelete_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

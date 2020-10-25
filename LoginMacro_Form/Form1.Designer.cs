@@ -41,6 +41,9 @@
             this.button_AddID = new System.Windows.Forms.Button();
             this.button_Refresh = new System.Windows.Forms.Button();
             this.textBox_Log = new System.Windows.Forms.TextBox();
+            this.button_IDDelete = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox_IDFilePath = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Info)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,15 +61,15 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("굴림", 11F);
-            this.label2.Location = new System.Drawing.Point(11, 67);
+            this.label2.Location = new System.Drawing.Point(58, 22);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 15);
+            this.label2.Size = new System.Drawing.Size(133, 15);
             this.label2.TabIndex = 5;
-            this.label2.Text = "FilePath";
+            this.label2.Text = "Execute File Path :";
             // 
             // textBox_FilePath
             // 
-            this.textBox_FilePath.Location = new System.Drawing.Point(85, 65);
+            this.textBox_FilePath.Location = new System.Drawing.Point(197, 17);
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(496, 24);
             this.textBox_FilePath.TabIndex = 7;
@@ -74,7 +77,7 @@
             // 
             // button_FilePath
             // 
-            this.button_FilePath.Location = new System.Drawing.Point(589, 65);
+            this.button_FilePath.Location = new System.Drawing.Point(701, 17);
             this.button_FilePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_FilePath.Name = "button_FilePath";
             this.button_FilePath.Size = new System.Drawing.Size(104, 24);
@@ -181,11 +184,43 @@
             this.textBox_Log.Size = new System.Drawing.Size(277, 211);
             this.textBox_Log.TabIndex = 25;
             // 
+            // button_IDDelete
+            // 
+            this.button_IDDelete.Location = new System.Drawing.Point(361, 530);
+            this.button_IDDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_IDDelete.Name = "button_IDDelete";
+            this.button_IDDelete.Size = new System.Drawing.Size(113, 34);
+            this.button_IDDelete.TabIndex = 26;
+            this.button_IDDelete.Text = "삭제";
+            this.button_IDDelete.UseVisualStyleBackColor = true;
+            this.button_IDDelete.Click += new System.EventHandler(this.button_IDDelete_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("굴림", 11F);
+            this.label1.Location = new System.Drawing.Point(99, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(92, 15);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "ID File Path :";
+            // 
+            // textBox_IDFilePath
+            // 
+            this.textBox_IDFilePath.Location = new System.Drawing.Point(197, 58);
+            this.textBox_IDFilePath.Name = "textBox_IDFilePath";
+            this.textBox_IDFilePath.Size = new System.Drawing.Size(496, 24);
+            this.textBox_IDFilePath.TabIndex = 28;
+            this.textBox_IDFilePath.Text = "D:\\";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(988, 610);
+            this.Controls.Add(this.textBox_IDFilePath);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button_IDDelete);
             this.Controls.Add(this.textBox_Log);
             this.Controls.Add(this.button_Refresh);
             this.Controls.Add(this.button_AddID);
@@ -224,6 +259,9 @@
         private System.Windows.Forms.Button button_AddID;
         private System.Windows.Forms.Button button_Refresh;
         private System.Windows.Forms.TextBox textBox_Log;
+        private System.Windows.Forms.Button button_IDDelete;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox_IDFilePath;
     }
 }
 
