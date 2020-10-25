@@ -59,6 +59,5 @@ Login Macro
   -Refresh부분 개선 ( 로그인 상태 변화 있을 경우에만 Table refresh) - 완료.
   
  2. 아이디 로그인 비밀번호 틀렸을 경우 재시도 과정 추가 (2번시도) - JPEG 이미지 비교 과정 확인
-  - 비밀번호 틀렷을 경우 enter ->비밀번호 입력 -> tab -> tab -> tab ->Id입력 -> enter
-  - 아이디 틀렷을 경우 enter -> 아이디입력 -> tab -> 비밀번호 입력 -> enter
+  -> esc -> esc ->enter 후 다시시도.
   
