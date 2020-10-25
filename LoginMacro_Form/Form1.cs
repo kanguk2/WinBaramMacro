@@ -30,6 +30,7 @@ namespace LoginMacro_Form
         private Log logs;
 
         private MovementForm Form_MF;
+        private ImageControlForm Form_ICF;
 
         public Form1()
         {
@@ -180,7 +181,17 @@ namespace LoginMacro_Form
                         }
                         if (bRet == false)
                         {
-                            if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
+
+                            if (eSL == eSeq_Login.LoginInputInfo && nTry++ == 0)
+                            {
+                                ProcessControl.keyInput(Keys.Enter, 250);
+                                ProcessControl.keyInput(Keys.Escape, 250);
+                                ProcessControl.keyInput(Keys.Enter, 100);
+
+                                eSL = eSeq_Login.LoginInputInfo;
+                                logs.Format($"{strID} : Input 정보 재입력..");
+                            }
+                            else if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
                             {
                                 Thread.Sleep(1000);
                                 eSL = eSeq_Login.LoginSelectServer;
@@ -318,7 +329,7 @@ namespace LoginMacro_Form
 
             return bRet;
         }
-        
+
         private bool InputInfoProgram(int nIndex, int nID)
         {
             bool bRet = false;
@@ -357,12 +368,12 @@ namespace LoginMacro_Form
                         Connectingcheck(nID);
 
                     Thread.Sleep(200);//Task.Delay(1000);
-                } while (nTry++ < 10);
+                } while (nTry++ < 13);
             }
             catch (Exception e)
             {
-                logs.Format(e.ToString()); 
-                bRet = false; 
+                logs.Format(e.ToString());
+                bRet = false;
             }
 
             return bRet;
@@ -594,9 +605,15 @@ namespace LoginMacro_Form
 
         private void button_FornIC_Click(object sender, EventArgs e)
         {
-            ImageControlForm Form_IF = new ImageControlForm(ref IDDatas);
 
-            Form_IF.Show();
+            if (Form_ICF != null && Form_ICF.IsHandleCreated == true)
+            {
+                ProcessControl.ForegroundProcess(Form_ICF.Handle);
+                return;
+            }
+
+            Form_ICF = new ImageControlForm(ref IDDatas);
+            Form_ICF.Show();
         }
 
         private void button_Movement_Click(object sender, EventArgs e)
@@ -609,11 +626,6 @@ namespace LoginMacro_Form
 
             Form_MF = new MovementForm(ref IDDatas);
             Form_MF.Show();
-        }
-
-        private void Form_MFClosedEvent(object sender, FormClosedEventArgs e)
-        {
-            
         }
 
         private void button_IDDataSave_Click(object sender, EventArgs e)

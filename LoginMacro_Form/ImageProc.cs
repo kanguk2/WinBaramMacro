@@ -97,7 +97,7 @@ namespace LoginMacro_Form
 
                 double min, max = 0;
                 Cv2.MinMaxLoc(res, out min, out max);
-                bRet = (max > 0.8) ? true : false;
+                bRet = (max > 0.9) ? true : false;
             }
             catch (Exception e)
             {
