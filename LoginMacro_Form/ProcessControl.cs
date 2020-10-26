@@ -66,12 +66,14 @@ namespace LoginMacro_Form
             ShowWindowAsync(handler, 1);
             SetForegroundWindow(handler);
 
+
             if (bMove)
             {
                 Rect rect = new Rect();
                 GetWindowRect(handler, ref rect);
                 MoveWindow(handler, 0, 0, rect.right - rect.left, rect.bottom - rect.top, true);
             }
+            Thread.Sleep(100);
         }
 
         public static void Display(int nPID)
@@ -130,18 +132,23 @@ namespace LoginMacro_Form
             
             process.Start();
         }
-        public static Boolean CheckProcess(int nPID)
+        public static bool CheckProcess(int nPID)
         {
+            bool bCheck = true;
             try
             {
-                System.Diagnostics.Process.GetProcessById(nPID);
+                Process process = System.Diagnostics.Process.GetProcessById(nPID);
+                if (process == null || process.ProcessName != "winbaram")
+                {
+                    bCheck = false;
+                }
             }
             catch (Exception)
             {
                 return false;
             }
 
-            return true;
+            return bCheck;
         }
 
         public static bool FindProcess(ref Process process, int nPID)

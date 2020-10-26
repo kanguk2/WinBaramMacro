@@ -93,6 +93,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaptureImageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaptureImageForm.Designer.cs">
+      <DependentUpon>CaptureImageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommandDatas.cs" />
     <Compile Include="ConstantsData.cs" />
     <Compile Include="DataClass.cs" />
@@ -125,6 +131,9 @@
     <Compile Include="RegistryControl.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="stringParser.cs" />
+    <EmbeddedResource Include="CaptureImageForm.resx">
+      <DependentUpon>CaptureImageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -21,6 +21,8 @@ namespace LoginMacro_Form
         private ManualResetEvent Event_Log = new ManualResetEvent(true);
 
         private Log log_Img;
+        private CaptureImageForm Form_CI;
+
         public ImageControlForm(ref IDData_KANG IDDatas)
         {
             this.IDDatas = IDDatas;
@@ -34,26 +36,40 @@ namespace LoginMacro_Form
         public void InitGridView()
         {
             IDDataTable.Columns.Add("ID");
-            IDDataTable.Columns.Add("STATE");
+            IDDataTable.Columns.Add("Group");
             IDDataTable.Columns[0].ReadOnly = true;
             IDDataTable.Columns[1].ReadOnly = true;
-            InitRow();
             this.dataGridView1_IDInfo.DataSource = this.IDDataTable;
+
+            InitRow();
 
         }
 
-        private void InitRow()
+        public void InitRow()
         {
-            try
+
+            if (this.InvokeRequired == false)
             {
-                foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
+                try
                 {
-                    IDDataTable.Rows.Add(items.Key, items.Value.strSTATE);
+                    IDDataTable.Clear();
+                    foreach (KeyValuePair<string, Datas> items in IDDatas.getDataTable())
+                    {
+                        if (items.Value.nPID != -1)
+                            IDDataTable.Rows.Add(items.Key, items.Value.nGroup);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log_Img.Format(e.Message.ToString());
                 }
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show(e.Message.ToString());
+                var d =
+                    Invoke((MethodInvoker)delegate () {
+                        InitRow();
+                    });
             }
         }
 
@@ -92,7 +108,7 @@ namespace LoginMacro_Form
             try
             {
                 Image img_capture = ImageProc.ImageCrop(GetDataGridSelectPID(dataGridView1_IDInfo.CurrentCell.RowIndex), eImagetype.name);
-                string strFilePath = ImageProc.m_strFilePath + GetDataGridSelectID(dataGridView1_IDInfo.CurrentCell.RowIndex) + ".bmp";
+                string strFilePath = $"{ImageProc.m_strIDInfo}{GetDataGridSelectID(dataGridView1_IDInfo.CurrentCell.RowIndex)}.bmp";
 
                 bool bEqual = true;
 
@@ -198,6 +214,32 @@ namespace LoginMacro_Form
             catch (Exception e) { log_Img.Format(e.ToString()); }
 
             return -1;
-        }   
+        }
+
+        private void button_getTotalImage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    int nPID = GetDataGridSelectPID(dataGridView1_IDInfo.CurrentCell.RowIndex);
+                    ProcessControl.Display(nPID);
+                    Image img_capture = ImageProc.ImageCrop(nPID, eImagetype.total);
+                    ProcessControl.MiniMizedProcess(nPID);
+                    if (Form_CI != null && Form_CI.IsHandleCreated == true)
+                    {
+                        ProcessControl.ForegroundProcess(Form_CI.Handle);
+                        return;
+                    }
+                    Form_CI = new CaptureImageForm(img_capture);
+                    Form_CI.Show();
+                }
+                catch (Exception ex)
+                {
+                    log_Img.Format(ex.ToString());
+                }
+            }
+            catch(Exception ex){ log_Img.Format( ex.ToString()); }
+        }
     }
 }

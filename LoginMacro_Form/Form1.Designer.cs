@@ -50,18 +50,18 @@
             // dataGridView_Info
             // 
             this.dataGridView_Info.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_Info.Location = new System.Drawing.Point(1, 125);
+            this.dataGridView_Info.Location = new System.Drawing.Point(1, 89);
             this.dataGridView_Info.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView_Info.Name = "dataGridView_Info";
             this.dataGridView_Info.RowTemplate.Height = 23;
-            this.dataGridView_Info.Size = new System.Drawing.Size(692, 397);
+            this.dataGridView_Info.Size = new System.Drawing.Size(620, 433);
             this.dataGridView_Info.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("굴림", 11F);
-            this.label2.Location = new System.Drawing.Point(58, 22);
+            this.label2.Location = new System.Drawing.Point(17, 13);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(133, 15);
             this.label2.TabIndex = 5;
@@ -69,7 +69,7 @@
             // 
             // textBox_FilePath
             // 
-            this.textBox_FilePath.Location = new System.Drawing.Point(197, 17);
+            this.textBox_FilePath.Location = new System.Drawing.Point(156, 8);
             this.textBox_FilePath.Name = "textBox_FilePath";
             this.textBox_FilePath.Size = new System.Drawing.Size(496, 24);
             this.textBox_FilePath.TabIndex = 7;
@@ -77,7 +77,7 @@
             // 
             // button_FilePath
             // 
-            this.button_FilePath.Location = new System.Drawing.Point(701, 17);
+            this.button_FilePath.Location = new System.Drawing.Point(660, 8);
             this.button_FilePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_FilePath.Name = "button_FilePath";
             this.button_FilePath.Size = new System.Drawing.Size(104, 24);
@@ -88,10 +88,10 @@
             // 
             // button_multiExecute
             // 
-            this.button_multiExecute.Location = new System.Drawing.Point(699, 124);
+            this.button_multiExecute.Location = new System.Drawing.Point(626, 89);
             this.button_multiExecute.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_multiExecute.Name = "button_multiExecute";
-            this.button_multiExecute.Size = new System.Drawing.Size(108, 55);
+            this.button_multiExecute.Size = new System.Drawing.Size(101, 55);
             this.button_multiExecute.TabIndex = 11;
             this.button_multiExecute.Text = "선택셀 실행";
             this.button_multiExecute.UseVisualStyleBackColor = true;
@@ -99,10 +99,10 @@
             // 
             // button_test
             // 
-            this.button_test.Location = new System.Drawing.Point(773, 530);
+            this.button_test.Location = new System.Drawing.Point(480, 530);
             this.button_test.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(108, 55);
+            this.button_test.Size = new System.Drawing.Size(141, 34);
             this.button_test.TabIndex = 13;
             this.button_test.Text = "테스트";
             this.button_test.UseVisualStyleBackColor = true;
@@ -110,10 +110,10 @@
             // 
             // button_FornIC
             // 
-            this.button_FornIC.Location = new System.Drawing.Point(699, 186);
+            this.button_FornIC.Location = new System.Drawing.Point(731, 89);
             this.button_FornIC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_FornIC.Name = "button_FornIC";
-            this.button_FornIC.Size = new System.Drawing.Size(215, 55);
+            this.button_FornIC.Size = new System.Drawing.Size(108, 55);
             this.button_FornIC.TabIndex = 14;
             this.button_FornIC.Text = "이미지컨트롤 모달리스";
             this.button_FornIC.UseVisualStyleBackColor = true;
@@ -121,10 +121,10 @@
             // 
             // button_Movement
             // 
-            this.button_Movement.Location = new System.Drawing.Point(699, 249);
+            this.button_Movement.Location = new System.Drawing.Point(845, 89);
             this.button_Movement.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Movement.Name = "button_Movement";
-            this.button_Movement.Size = new System.Drawing.Size(215, 55);
+            this.button_Movement.Size = new System.Drawing.Size(88, 55);
             this.button_Movement.TabIndex = 15;
             this.button_Movement.Text = "명령수행 모달리스";
             this.button_Movement.UseVisualStyleBackColor = true;
@@ -165,7 +165,7 @@
             // 
             // button_Refresh
             // 
-            this.button_Refresh.Location = new System.Drawing.Point(617, 530);
+            this.button_Refresh.Location = new System.Drawing.Point(1, 572);
             this.button_Refresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Refresh.Name = "button_Refresh";
             this.button_Refresh.Size = new System.Drawing.Size(150, 34);
@@ -177,11 +177,11 @@
             // textBox_Log
             // 
             this.textBox_Log.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox_Log.Location = new System.Drawing.Point(699, 311);
+            this.textBox_Log.Location = new System.Drawing.Point(626, 151);
             this.textBox_Log.Multiline = true;
             this.textBox_Log.Name = "textBox_Log";
             this.textBox_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_Log.Size = new System.Drawing.Size(277, 211);
+            this.textBox_Log.Size = new System.Drawing.Size(307, 222);
             this.textBox_Log.TabIndex = 25;
             // 
             // button_IDDelete
@@ -199,7 +199,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("굴림", 11F);
-            this.label1.Location = new System.Drawing.Point(99, 61);
+            this.label1.Location = new System.Drawing.Point(58, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 15);
             this.label1.TabIndex = 27;
@@ -207,7 +207,7 @@
             // 
             // textBox_IDFilePath
             // 
-            this.textBox_IDFilePath.Location = new System.Drawing.Point(197, 58);
+            this.textBox_IDFilePath.Location = new System.Drawing.Point(156, 38);
             this.textBox_IDFilePath.Name = "textBox_IDFilePath";
             this.textBox_IDFilePath.Size = new System.Drawing.Size(496, 24);
             this.textBox_IDFilePath.TabIndex = 28;
@@ -217,7 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 610);
+            this.ClientSize = new System.Drawing.Size(945, 618);
             this.Controls.Add(this.textBox_IDFilePath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_IDDelete);

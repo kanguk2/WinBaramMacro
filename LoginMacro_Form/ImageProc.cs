@@ -48,7 +48,8 @@ namespace LoginMacro_Form
             }
             finally
             {
-                img.Save(m_strFilePath + "temp.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                if(img != null)
+                    img.Save(m_strFilePath + "temp.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
             }
             return img;
         }

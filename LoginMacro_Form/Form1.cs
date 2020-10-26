@@ -425,6 +425,10 @@ namespace LoginMacro_Form
                 {
                     Form_MF.Init_IDRow();
                 }
+                if (Form_ICF != null && Form_ICF.IsHandleCreated == true)
+                {
+                    Form_ICF.InitRow();
+                }
             }
             else
             {
@@ -763,7 +767,6 @@ namespace LoginMacro_Form
                 logs.Format(ex.ToString());
             }
         }
-
     }
 }
     
