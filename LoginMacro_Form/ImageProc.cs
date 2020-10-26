@@ -54,6 +54,31 @@ namespace LoginMacro_Form
             return img;
         }
 
+        public static Image ImageCrop(int nPID, Rectangle rect)
+        {
+            Image img = null;
+            try
+            {
+                Process process = new Process();
+                ProcessControl.FindProcess(ref process, nPID);
+
+                ScreenCapture sc = new ScreenCapture();
+
+                img = sc.CaptureWindow(process.MainWindowHandle, rect);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                img = null;
+            }
+            finally
+            {
+                if (img != null)
+                    img.Save(m_strFilePath + "temp.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+            return img;
+        }
+
         public void ImageCrop(Image img)
         {
             var ocr = new TesseractEngine("./tessdata", "kor", EngineMode.Default);
@@ -114,12 +139,13 @@ namespace LoginMacro_Form
             return bRet;
         }
 
-        public void ImageCrop(Bitmap img)
+        public static string ImageCrop(Bitmap img)
         {
-            var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.TesseractOnly);
-
+            var ocr = new TesseractEngine("./tessdata", "eng", EngineMode.Default);
+            ocr.SetVariable("tessedit_char_whitelist", "0123456789");
             var texts = ocr.Process(img);
-            MessageBox.Show(texts.GetText());
+            return texts.GetText();
+//            MessageBox.Show(texts.GetText());
         }
 
         public void ImageCrop(Pix pix)
@@ -139,11 +165,9 @@ namespace LoginMacro_Form
             return PixConverter.ToPix(screen);
         }
 
-        public Bitmap ThresholdImage(Bitmap image, Rectangle rect)
+        public static Bitmap ThresholdImage(Bitmap image, int nThreshold)
         {
             int R, G, B = 0;
-
-            int nThreshold = ConvertStringtoInt("0");//text_thresholdvalue.ToString());
 
             for (int i = 0; i < image.Width; i++)
             {
@@ -156,25 +180,24 @@ namespace LoginMacro_Form
 
                     if (R > nThreshold && G > nThreshold && B > nThreshold)
                     {
-                        image.SetPixel(i, j, Color.White);
+                        image.SetPixel(i, j, Color.Black);
                     }
                     else
                     {
-                        image.SetPixel(i, j, Color.Black);
+                        image.SetPixel(i, j, Color.White);
                     }
 
                 }
             }
 
-            //image = ResizeImage(image, rect.Width, rect.Height);
-
             return image;
         }
-        public Bitmap ThresholdImage_Name(Bitmap image, Rectangle rect)
+
+        public static Bitmap ThresholdImage_Name(Bitmap image, Rectangle rect)
         {
             int R, G, B = 0;
 
-            int nThreshold = ConvertStringtoInt("0");// text_thresholdvalue.ToString());
+            int nThreshold = 0;// text_thresholdvalue.ToString());
 
             for (int i = 0; i < image.Width; i++)
             {
@@ -185,7 +208,7 @@ namespace LoginMacro_Form
                     G = c.G;
                     B = c.B;
 
-                    if (R==255 && G==255 && B == 255)
+                    if (R == nThreshold && G == nThreshold && B == nThreshold)
                     {
                         image.SetPixel(i, j, Color.Black);
                     }
@@ -193,11 +216,8 @@ namespace LoginMacro_Form
                     {
                         image.SetPixel(i, j, Color.White);
                     }
-
                 }
             }
-
-            //image = ResizeImage(image, rect.Width, rect.Height);
 
             return image;
         }

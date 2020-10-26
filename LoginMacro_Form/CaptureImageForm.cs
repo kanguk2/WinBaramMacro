@@ -32,7 +32,7 @@ namespace LoginMacro_Form
             {
                 Point p = Control.MousePosition;
                 Point p1 = pictureBox.PointToClient(p);
-                if (p1.X < 0 || p1.X > pictureBox.Width || p1.Y < 0 || p1.Y > pictureBox.Height)
+                if (p1.X < 0 || p1.X > pictureBox.Image.Width || p1.Y < 0 || p1.Y > pictureBox.Image.Height)
                     return;
 
                 label_AXIS.Text = $"Y:{p1.Y},X;{p1.X}";

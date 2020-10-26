@@ -241,5 +241,69 @@ namespace LoginMacro_Form
             }
             catch(Exception ex){ log_Img.Format( ex.ToString()); }
         }
+
+        private void button_GetImageAxis_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int nXStart = int.Parse(textBox_XStart.Text.ToString());
+                int nXEnd = int.Parse(textBox_XEnd.Text.ToString());
+                int nYStart = int.Parse(textBox_YStart.Text.ToString());
+                int nYEnd = int.Parse(textBox_YEnd.Text.ToString());
+
+                if ((nXStart > nXEnd) || (nYStart > nYEnd))
+                    throw new Exception("좌표를 확인하고 다시 입력해주세요.");
+
+                int nPID = GetDataGridSelectPID(dataGridView1_IDInfo.CurrentCell.RowIndex);
+
+                ProcessControl.Display(nPID);
+
+                
+
+                picturBox.Image = ImageProc.ImageCrop(nPID, new Rectangle(nXStart, nYStart, nXEnd - nXStart, nYEnd - nYStart));
+               
+                ProcessControl.MiniMizedProcess(nPID);
+            }
+            catch (Exception ex) { log_Img.Format(ex.ToString()); };
+        }
+
+        private void textBox_XStart_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))    //숫자와 백스페이스를 제외한 나머지를 바로 처리
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void button_ocr_Click(object sender, EventArgs e)
+        {
+            if (picturBox.Image != null)
+                log_Img.Format(ImageProc.ImageCrop(new Bitmap(picturBox.Image)));
+
+            try
+            {
+/*                int nXStart = int.Parse(textBox_XStart.Text.ToString());
+                int nXEnd = int.Parse(textBox_XEnd.Text.ToString());
+                int nYStart = int.Parse(textBox_YStart.Text.ToString());
+                int nYEnd = int.Parse(textBox_YEnd.Text.ToString());
+
+                Rectangle rectangle = new Rectangle(nXStart, nYStart, nXEnd - nXStart, nYEnd - nYStart);
+*/
+                log_Img.Format(ImageProc.ImageCrop(new Bitmap(picturBox.Image)));
+            }
+            catch (Exception ex) { log_Img.Format(ex.ToString()); };
+        }
+
+        private void button_convertimg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int Threshold = int.Parse(textBox_Threshold.Text);
+                
+                picturBox.Image = ImageProc.ThresholdImage(new Bitmap(picturBox.Image), Threshold); 
+                //                log_Img.Format(ImageProc.ImageCrop(new Bitmap(picturBox.Image)));
+            }
+            catch (Exception ex) { log_Img.Format(ex.ToString()); };
+        }
     }
 }

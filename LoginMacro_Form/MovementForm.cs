@@ -102,7 +102,7 @@ namespace LoginMacro_Form
                 Init_CommandRow();
 
                 dataGridView_Command.Columns.Add(BTSingle);
-                dataGridView_Command.CellClick += new DataGridViewCellEventHandler(CommandInput);
+                dataGridView_Command.CellClick += new DataGridViewCellEventHandler(CommandInput_Click);
                 dataGridView_Command.Columns.Add(cCell);
 
                 this.dataGridView_Command.Columns["명령어"].Width = (int)(this.dataGridView_Command.Width * 0.6);
@@ -163,7 +163,7 @@ namespace LoginMacro_Form
         }
 
 
-        private void CommandInput(object sender, DataGridViewCellEventArgs e)
+        private void CommandInput_Click(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -173,8 +173,11 @@ namespace LoginMacro_Form
                 int nIndex = e.RowIndex;
                 int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
 
+                object ID = dataGridView_Command.Rows[nIndex].Cells["ID"].Value;//
+                
+                string strID = ((ID == null) ? GetDataGridSelectID(nIdIndex) : ID.ToString());
 
-                CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
+                CommandInput(nIndex, strID);//dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
                 //This is the code which will show the button click row data. Thank you.
             }
             catch (Exception ex)

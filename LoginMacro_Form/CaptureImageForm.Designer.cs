@@ -37,14 +37,14 @@
             // 
             this.pictureBox.Location = new System.Drawing.Point(3, 7);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(1071, 695);
+            this.pictureBox.Size = new System.Drawing.Size(706, 598);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
             // label_AXIS
             // 
             this.label_AXIS.AutoSize = true;
-            this.label_AXIS.Location = new System.Drawing.Point(1104, 18);
+            this.label_AXIS.Location = new System.Drawing.Point(715, 9);
             this.label_AXIS.Name = "label_AXIS";
             this.label_AXIS.Size = new System.Drawing.Size(30, 12);
             this.label_AXIS.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1204, 704);
+            this.ClientSize = new System.Drawing.Size(857, 620);
             this.Controls.Add(this.label_AXIS);
             this.Controls.Add(this.pictureBox);
             this.Name = "CaptureImageForm";
