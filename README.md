@@ -61,3 +61,6 @@ Login Macro
  2. 아이디 로그인 비밀번호 틀렸을 경우 재시도 과정 추가 (1번시도) 
   -> esc -> esc ->enter 후 다시시도. 완료
   
+10/26
+ 1. Process Capture 후 Form생성, 해당 Form 에 출력해준 후 좌표 찾는 기능 추가 - 완료
+ 2. 연결됨 연결안됨 확인 시 Process 가 winbaram인지 체크하는 부분 추가. - 완료
