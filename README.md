@@ -64,3 +64,8 @@ Login Macro
 10/26
  1. Process Capture 후 Form생성, 해당 Form 에 출력해준 후 좌표 찾는 기능 추가 - 완료
  2. 연결됨 연결안됨 확인 시 Process 가 winbaram인지 체크하는 부분 추가. - 완료
+
+10/30
+ 1. 명령어 반복수행 기능 추가.
+ 2. 멀티로그인 개선
+  a. Sleep 시간 최소화 하는 방향으로 개선
