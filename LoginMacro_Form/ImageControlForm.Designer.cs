@@ -185,7 +185,7 @@
             this.textBox_XStart.Name = "textBox_XStart";
             this.textBox_XStart.Size = new System.Drawing.Size(59, 21);
             this.textBox_XStart.TabIndex = 24;
-            this.textBox_XStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_XStart_KeyPress);
+            this.textBox_XStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CommonFunc.TextOnlyNumberInput);
             // 
             // textBox_YStart
             // 
@@ -193,7 +193,7 @@
             this.textBox_YStart.Name = "textBox_YStart";
             this.textBox_YStart.Size = new System.Drawing.Size(59, 21);
             this.textBox_YStart.TabIndex = 25;
-            this.textBox_YStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_XStart_KeyPress);
+            this.textBox_YStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CommonFunc.TextOnlyNumberInput);
             // 
             // textBox_XEnd
             // 
@@ -201,7 +201,7 @@
             this.textBox_XEnd.Name = "textBox_XEnd";
             this.textBox_XEnd.Size = new System.Drawing.Size(59, 21);
             this.textBox_XEnd.TabIndex = 26;
-            this.textBox_XEnd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_XStart_KeyPress);
+            this.textBox_XEnd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CommonFunc.TextOnlyNumberInput);
             // 
             // textBox_YEnd
             // 
@@ -209,7 +209,7 @@
             this.textBox_YEnd.Name = "textBox_YEnd";
             this.textBox_YEnd.Size = new System.Drawing.Size(59, 21);
             this.textBox_YEnd.TabIndex = 27;
-            this.textBox_YEnd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_XStart_KeyPress);
+            this.textBox_YEnd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CommonFunc.TextOnlyNumberInput);
             // 
             // button_ocr
             // 
@@ -239,7 +239,7 @@
             this.textBox_Threshold.Name = "textBox_Threshold";
             this.textBox_Threshold.Size = new System.Drawing.Size(59, 21);
             this.textBox_Threshold.TabIndex = 30;
-            this.textBox_Threshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_XStart_KeyPress);
+            this.textBox_Threshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(CommonFunc.TextOnlyNumberInput);
             // 
             // ImageControlForm
             // 

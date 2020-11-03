@@ -499,7 +499,7 @@ namespace LoginMacro_Form
                 bool bCheck = ProcessControl.CheckProcess(tmp_data.nPID);
 
                 //이전 Process Check.
-                bool preProcessCheck = (IDDataTable.Rows[nIndex]["STATE"] == "연결됨");
+                bool preProcessCheck = (IDDataTable.Rows[nIndex]["STATE"].ToString() == "연결됨");
 
                 if (bCheck != preProcessCheck)
                 {

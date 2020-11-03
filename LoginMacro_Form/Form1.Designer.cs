@@ -54,7 +54,7 @@
             this.dataGridView_Info.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridView_Info.Name = "dataGridView_Info";
             this.dataGridView_Info.RowTemplate.Height = 23;
-            this.dataGridView_Info.Size = new System.Drawing.Size(620, 433);
+            this.dataGridView_Info.Size = new System.Drawing.Size(661, 433);
             this.dataGridView_Info.TabIndex = 3;
             // 
             // label2
@@ -88,7 +88,7 @@
             // 
             // button_multiExecute
             // 
-            this.button_multiExecute.Location = new System.Drawing.Point(626, 89);
+            this.button_multiExecute.Location = new System.Drawing.Point(668, 89);
             this.button_multiExecute.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_multiExecute.Name = "button_multiExecute";
             this.button_multiExecute.Size = new System.Drawing.Size(101, 55);
@@ -110,7 +110,7 @@
             // 
             // button_FornIC
             // 
-            this.button_FornIC.Location = new System.Drawing.Point(731, 89);
+            this.button_FornIC.Location = new System.Drawing.Point(773, 89);
             this.button_FornIC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_FornIC.Name = "button_FornIC";
             this.button_FornIC.Size = new System.Drawing.Size(108, 55);
@@ -121,7 +121,7 @@
             // 
             // button_Movement
             // 
-            this.button_Movement.Location = new System.Drawing.Point(845, 89);
+            this.button_Movement.Location = new System.Drawing.Point(887, 89);
             this.button_Movement.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Movement.Name = "button_Movement";
             this.button_Movement.Size = new System.Drawing.Size(88, 55);
@@ -177,7 +177,7 @@
             // textBox_Log
             // 
             this.textBox_Log.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox_Log.Location = new System.Drawing.Point(626, 151);
+            this.textBox_Log.Location = new System.Drawing.Point(668, 151);
             this.textBox_Log.Multiline = true;
             this.textBox_Log.Name = "textBox_Log";
             this.textBox_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -217,7 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(945, 618);
+            this.ClientSize = new System.Drawing.Size(986, 618);
             this.Controls.Add(this.textBox_IDFilePath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_IDDelete);

@@ -21,7 +21,7 @@ namespace LoginMacro_Form
         private List<CommandDatas> commanddatas = new List<CommandDatas>();
 
         private Log Log_move;
-
+        private System.Windows.Forms.Timer timerRepeat = null;
         public MovementForm(ref IDData_KANG IDDatas)
         {
             this.IDDatas = IDDatas;
@@ -30,8 +30,9 @@ namespace LoginMacro_Form
             InitIDInfo_Grid();
             InitCommand_Grid();
             Log_move = new Log(ref textBox_Log);
+            timerRepeat = new System.Windows.Forms.Timer();
         }
-        
+
         private void InitIDInfo_Grid()
         {
             IDDataTable.Columns.Add("ID");
@@ -449,6 +450,69 @@ namespace LoginMacro_Form
             catch (Exception ex)
             {
                 Log_move.Format(ex.ToString());
+            }
+        }
+
+        private void button_repeatExecute_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string strCount = textBox_repeatCount.Text;
+                string strInterval = textBox_repeatInterval.Text;
+
+                if (strCount.Length == 0 || strInterval.Length == 0)
+                    throw new Exception("count or interval 정보가 잘못 입력되었습니다.");
+
+                timerRepeat.Interval = int.Parse(strInterval);
+                timerRepeat.Tick += new EventHandler(TimerRepeat_Tick);
+                timerRepeat.Start();
+            }
+            catch(Exception ex)
+            {
+                Log_move.Format(ex.ToString());
+            }
+            finally
+            {
+                changeUI();
+            }
+        }
+
+        private void changeUI()
+        {
+            //bStatus - timer가 실행중인지 여부.
+            bool bStatus = timerRepeat.Enabled;
+            if (this.InvokeRequired == false)
+            {
+                button_repeatExecute.Text = (bStatus) ? "반복실행 중지" : "반복실행";
+                button_test.Enabled = !bStatus;
+                button_return.Enabled = !bStatus;
+                button_LoadCommandDatas.Enabled = !bStatus;
+                button_SaveCommandDatas.Enabled = !bStatus;
+                button_AddCommandData.Enabled = !bStatus;
+                button_DeleteCommandData.Enabled = !bStatus;
+                button_SelCommand.Enabled = !bStatus;
+            }
+            else
+            {
+                var d = Invoke((MethodInvoker)delegate () {
+                    changeUI();
+                });
+            }
+        }
+
+        private void TimerRepeat_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                for(DataRowCollection in IDDataTable.Rows[1].)
+            }
+            catch (Exception ex)
+            {
+                Log_move.Format(ex.ToString());
+            }
+            finally
+            {
+
             }
         }
     }
