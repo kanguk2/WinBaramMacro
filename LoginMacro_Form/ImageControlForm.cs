@@ -110,7 +110,7 @@ namespace LoginMacro_Form
                 Image img_capture = ImageProc.ImageCrop(GetDataGridSelectPID(dataGridView1_IDInfo.CurrentCell.RowIndex), eImagetype.name);
                 string strFilePath = $"{ImageProc.m_strIDInfo}{GetDataGridSelectID(dataGridView1_IDInfo.CurrentCell.RowIndex)}.bmp";
 
-                bool bEqual = true;
+                bool bEqual  = true;
 
                 if (new FileInfo(strFilePath).Exists == false)
                 {

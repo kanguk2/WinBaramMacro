@@ -21,7 +21,8 @@ namespace LoginMacro_Form
         private List<CommandDatas> commanddatas = new List<CommandDatas>();
 
         private Log Log_move;
-        private System.Windows.Forms.Timer timerRepeat = null;
+        private Thread Thread_Repeat;
+
         public MovementForm(ref IDData_KANG IDDatas)
         {
             this.IDDatas = IDDatas;
@@ -30,7 +31,6 @@ namespace LoginMacro_Form
             InitIDInfo_Grid();
             InitCommand_Grid();
             Log_move = new Log(ref textBox_Log);
-            timerRepeat = new System.Windows.Forms.Timer();
         }
 
         private void InitIDInfo_Grid()
@@ -179,7 +179,7 @@ namespace LoginMacro_Form
                 string strID = ((ID == null) ? GetDataGridSelectID(nIdIndex) : ID.ToString());
 
                 CommandInput(nIndex, strID);//dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
-                //This is the code which will show the button click row data. Thank you.
+
             }
             catch (Exception ex)
             {
@@ -400,22 +400,7 @@ namespace LoginMacro_Form
 
         private void button_SelCommand_Click(object sender, EventArgs e)
         {
-            try
-            {
-                for (int nIndex = 0; nIndex < dataGridView_Command.Rows.Count; nIndex++)
-                {
-                    if (dataGridView_Command.Rows[nIndex].Selected == false)
-                        continue;
-
-                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
-                        continue;
-
-                    CommandInput(nIndex, dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
-                }
-            }
-            catch (Exception)
-            {
-            }
+            Execute_selectCommand();
         }
 
         private void button_IDDataLoad_Click(object sender, EventArgs e)
@@ -457,15 +442,23 @@ namespace LoginMacro_Form
         {
             try
             {
-                string strCount = textBox_repeatCount.Text;
-                string strInterval = textBox_repeatInterval.Text;
+                if (Thread_Repeat == null || Thread_Repeat.IsAlive == false)
+                {
+                    string strCount = textBox_repeatCount.Text;
+                    string strInterval = textBox_repeatInterval.Text;
 
-                if (strCount.Length == 0 || strInterval.Length == 0)
-                    throw new Exception("count or interval 정보가 잘못 입력되었습니다.");
-
-                timerRepeat.Interval = int.Parse(strInterval);
-                timerRepeat.Tick += new EventHandler(TimerRepeat_Tick);
-                timerRepeat.Start();
+                    if (strCount.Length == 0 || strInterval.Length == 0)
+                        throw new Exception("count or interval 정보가 잘못 입력되었습니다.");
+                    
+                    Thread_Repeat = new Thread(new ThreadStart(ThreadRepeatFunc));
+                    Thread_Repeat.Start();
+                }
+                else
+                {
+                    Thread_Repeat.Suspend();
+                    Thread_Repeat.Abort();
+                    Thread_Repeat = null;
+                }
             }
             catch(Exception ex)
             {
@@ -473,47 +466,80 @@ namespace LoginMacro_Form
             }
             finally
             {
-                changeUI();
+                changeUI(Thread_Repeat != null);
             }
         }
 
-        private void changeUI()
+        private void changeUI(bool bStart)
         {
             //bStatus - timer가 실행중인지 여부.
-            bool bStatus = timerRepeat.Enabled;
             if (this.InvokeRequired == false)
             {
-                button_repeatExecute.Text = (bStatus) ? "반복실행 중지" : "반복실행";
-                button_test.Enabled = !bStatus;
-                button_return.Enabled = !bStatus;
-                button_LoadCommandDatas.Enabled = !bStatus;
-                button_SaveCommandDatas.Enabled = !bStatus;
-                button_AddCommandData.Enabled = !bStatus;
-                button_DeleteCommandData.Enabled = !bStatus;
-                button_SelCommand.Enabled = !bStatus;
+                button_repeatExecute.Text = (bStart) ? "반복실행 중지" : "반복실행";
+                button_test.Enabled = !bStart;
+                button_return.Enabled = !bStart;
+                button_LoadCommandDatas.Enabled = !bStart;
+                button_SaveCommandDatas.Enabled = !bStart;
+                button_AddCommandData.Enabled = !bStart;
+                button_DeleteCommandData.Enabled = !bStart;
+                button_SelCommand.Enabled = !bStart;
             }
             else
             {
                 var d = Invoke((MethodInvoker)delegate () {
-                    changeUI();
+                    changeUI(bStart);
                 });
             }
         }
 
-        private void TimerRepeat_Tick(object sender, EventArgs e)
+        private object lockobj = new object();
+        private void ThreadRepeatFunc()
+        {
+            
+            try
+            {
+                int nRepeat = 0;
+
+                while(nRepeat++ < int.Parse(textBox_repeatCount.Text))
+                {
+                    Execute_selectCommand();
+
+                    if(nRepeat != int.Parse(textBox_repeatCount.Text))
+                        Thread.Sleep(int.Parse(textBox_repeatInterval.Text));
+                }
+            }
+            catch(Exception ex) { Log_move.Format(ex.ToString()); }
+            finally
+            {
+                changeUI(false);
+            }
+        }
+
+        private void Execute_selectCommand()
         {
             try
             {
-                for(DataRowCollection in IDDataTable.Rows[1].)
+                for (int nIndex = 0; nIndex < this.dataGridView_Command.Rows.Count; nIndex++)
+                {
+                    if (this.dataGridView_Command.Rows[nIndex].Selected == false)
+                        continue;
+
+                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
+                        continue;
+
+                    CommandInput(nIndex, this.dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
+                }
             }
             catch (Exception ex)
             {
+
                 Log_move.Format(ex.ToString());
             }
-            finally
-            {
+        }
 
-            }
+        private void MoveFormClosed(object sender, FormClosedEventArgs e)
+        {
+            Thread_Repeat = null;
         }
     }
 }

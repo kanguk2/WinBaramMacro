@@ -181,8 +181,9 @@ namespace LoginMacro_Form
                         }
                         if (bRet == false)
                         {
-
-                            if (eSL == eSeq_Login.LoginInputInfo && nTry++ == 0)
+                            if(eSL != eSeq_Login.LoginError && nTry++ < 2)
+                                eSL = ErrorCheck(nID, strID);
+/*                            if (eSL == eSeq_Login.LoginInputInfo && nTry++ == 0)
                             {
                                 ProcessControl.keyInput(Keys.Enter, 250);
                                 ProcessControl.keyInput(Keys.Escape, 250);
@@ -190,14 +191,18 @@ namespace LoginMacro_Form
 
                                 eSL = eSeq_Login.LoginInputInfo;
                                 logs.Format($"{strID} : Input 정보 재입력..");
+
+                                nTry = 0;
                             }
                             else if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
                             {
-                                Thread.Sleep(1000);
-                                eSL = eSeq_Login.LoginSelectServer;
+                                ProcessControl.keyInput(Keys.Enter, 100);
                                 logs.Format($"{strID} : Reconnect 확인 재시도..");
+                                Thread.Sleep(3000);
+                                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID, 5, 500);
+                                eSL = bRet ? eSeq_Login.LoginSelectServer : eSeq_Login.LoginError;
                             }
-
+*/
                             else
                             {
                                 strError += eSL.ToString();
@@ -232,6 +237,42 @@ namespace LoginMacro_Form
             }
         }
 
+        private eSeq_Login ErrorCheck(int nID, string strID)
+        {
+            eSeq_Login retSeq = eSeq_Login.LoginError;
+
+            try
+            {
+                if (ReconnectCheck(nID))
+                {
+                    ProcessControl.keyInput(Keys.Enter, 100);
+                    logs.Format($"{strID} : Reconnect 확인 재시도..");
+                    Thread.Sleep(3000);
+                    bool bCheck = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID, 5, 500);
+                    retSeq = bCheck ? eSeq_Login.LoginSelectServer : eSeq_Login.LoginError;
+
+                    return retSeq;
+                }
+
+                if (Connectingcheck(nID))
+                {
+                    ProcessControl.keyInput(Keys.Enter, 250);
+                    ProcessControl.keyInput(Keys.Escape, 250);
+                    ProcessControl.keyInput(Keys.Enter, 100);
+
+                    logs.Format($"{strID} : Input 정보 재입력..");
+
+                    return eSeq_Login.LoginInputInfo;
+                }
+            }
+            catch (Exception ex)
+            {
+                retSeq = eSeq_Login.LoginError;
+            }
+
+            return retSeq;
+        }
+
         private bool ExecuteProgram(ref int nID)
         {
             bool bRet = false;
@@ -243,6 +284,7 @@ namespace LoginMacro_Form
                 nID = temp.Id;
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
+
             }
             catch (Exception e) 
             { 
@@ -258,14 +300,22 @@ namespace LoginMacro_Form
             bool bRet = false;
             try
             {
+                int nTry = 0;
+
+                Thread.Sleep(1500); // 어떻게 할수가없음.
+
                 ProcessControl.Display(nID);
-                Thread.Sleep(400); // 어떻게 할수가없음.
+                do
+                {
+                    ProcessControl.keyInput(Keys.Tab);
+                    ProcessControl.keyInput(Keys.Tab);
+                    ProcessControl.keyInput(Keys.Enter, 1500);
 
-                ProcessControl.keyInput(Keys.Tab);
-                ProcessControl.keyInput(Keys.Tab);
-                ProcessControl.keyInput(Keys.Enter, 1500);
+                    bRet = ImageProc.ImageCompare($"{ImageProc.m_strLogin}2.bmp", new Bitmap(ImageProc.ImageCrop(nID, eImagetype.total)));
 
-                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID);
+                    if (bRet == true)
+                        break;
+                } while (nTry++ < 5);
             }
             catch (Exception e) 
             {
@@ -281,8 +331,7 @@ namespace LoginMacro_Form
             try
             {
                 ProcessControl.keyInput(Keys.Down);
-                ProcessControl.keyInput(Keys.Enter, 1000);
-
+                ProcessControl.keyInput(Keys.Enter, 1200);
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
@@ -296,7 +345,11 @@ namespace LoginMacro_Form
             bool bRet = false;
             try
             {
+                if (ImageCompareSeq($"{ImageProc.m_strLogin}이미접속중.bmp", eImagetype.total, nID, 2, 100))
+                    ProcessControl.keyInput(Keys.Enter, 100);
+
                 ProcessControl.keyInput(Keys.A, 100);
+
                 ProcessControl.keyInput(Keys.Enter, 100);
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}4.bmp", eImagetype.total, nID);
@@ -317,9 +370,11 @@ namespace LoginMacro_Form
             try
             {
                 int n =0;
+
                 do
                 {
                     bRet = ImageProc.ImageCompare(strPath, new Bitmap(ImageProc.ImageCrop(nID, imagetype)));
+
                     if (bRet == true)
                         break;
                     Thread.Sleep(nSleepTime);//Task.Delay(1000);
@@ -394,7 +449,7 @@ namespace LoginMacro_Form
             return bReconnect;
         }
 
-        private void Connectingcheck(int nID)
+        private bool Connectingcheck(int nID)
         {
             bool bConnecting = false;
             try
@@ -410,6 +465,8 @@ namespace LoginMacro_Form
                 }
             }
             catch (Exception e) { }
+
+            return bConnecting;
         }
 
         private void ChangeTextRow(int nIndex, Boolean bConnect)
