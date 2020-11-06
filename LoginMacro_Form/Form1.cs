@@ -655,8 +655,20 @@ namespace LoginMacro_Form
 
         private void button_multiExecute_Click(object sender, EventArgs e)
         {
-            Thread_MultiLE = new Thread(() => ThreadMultiExecute());
-            Thread_MultiLE.Start();
+            if(Thread_MultiLE == null || Thread_MultiLE.IsAlive == false)
+            {
+                Thread_MultiLE = new Thread(() => ThreadMultiExecute());
+                Thread_MultiLE.Start();
+            }
+            else
+            {
+                if (Thread_LE != null || Thread_LE.IsAlive)
+                {
+                    Thread_LE.Join();
+                    Thread_MultiLE.Interrupt();
+                    Thread_MultiLE = null;
+                }
+            }
         }
   
         private void button_test_Click(object sender, EventArgs e)

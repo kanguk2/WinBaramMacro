@@ -274,65 +274,26 @@ namespace LoginMacro_Form
         {
             try
             {
-                for (int nIndex = 0; nIndex < dataGridView_IDInfo.Rows.Count; nIndex++)
-                {
-                    if (dataGridView_IDInfo.Rows[nIndex].Selected == false)
-                        continue;
+                int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
 
-                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
-                        continue;
-
-                    eventMove(nIndex);
-                }
+                EastMove(nIdIndex);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
-
         }
 
-        private void eventMove(int nIndex)
+        private void EastMove(int nIndex)
         {
             string strID = GetDataGridSelectID(nIndex);
-
-            string strPlace = textBox_place.Text;
-
-            int iPos = 0;
-            for (iPos = 0; iPos < PLACE.strPLACE.Length; iPos++)
-            {
-                if (strPlace == PLACE.strPLACE[iPos])
-                    break;
-            }
-
-            if (iPos >= PLACE.strPLACE.Length)
-            {
-                Log_move.Format(strID + "이동실패 : 장소를 잘못 입력하셨습니다");
-                return;
-            }
 
             ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
             Thread.Sleep(200);
 
-            if (iPos >= 10)
-            {
-
-                SendKeys.SendWait("01{enter}ZX");
-                iPos -= 10;
-            }
-
-            SendKeys.SendWait("{enter}귀환{enter}");
-            Thread.Sleep(200);
-
-            for (int i = 0; i < iPos + 1; i++)
-            {
-                ProcessControl.keyInput(Keys.Down, 10);
-            }
-            ProcessControl.keyInput(Keys.Enter, 300);
-
             SendKeys.SendWait("01{enter}");
 
-            Log_move.Format(strID + ": " + strPlace + "이동완료.");
+            Log_move.Format($"{strID} : 동쪽 이동");
         }
 
         private void button_CommandDelete_Click(object sender, EventArgs e)
@@ -359,38 +320,14 @@ namespace LoginMacro_Form
                 int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
                 string strID = GetDataGridSelectID(nIdIndex);
 
-                string strPlace = textBox_place.Text;
-
-                int iPos = 0;
-                for (iPos = 0; iPos < PLACE.strPLACE.Length; iPos++)
-                {
-                    if (strPlace == PLACE.strPLACE[iPos])
-                        break;
-                }
-
-                if (iPos >= PLACE.strPLACE.Length)
-                {
-                    Log_move.Format(strID + " 복귀실패 : 장소를 잘못 입력하셨습니다.");
-                    throw new Exception();
-                }
+                string strGoID = textBox_GoID.Text;
 
                 ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
+                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
 
-                Log_move.Format(strID + ": " + PLACE.strPLACE[iPos] + "에서 복귀시작");
+                Log_move.Format($"{strID} {strGoID}로 출두");
 
-                SendKeys.SendWait("04");
-                ProcessControl.keyInput(Keys.Enter, 300);
-
-                if (iPos >= 10)
-                {
-                    string str = "9굴" + PLACE.strPLACE[iPos][0];
-                    SendKeys.SendWait(str);
-                    ProcessControl.keyInput(Keys.Enter, 300);
-                }
-                else
-                {
-                    SendKeys.SendWait("9조그만삐삐{enter}");
-                }
+                SendKeys.SendWait("04{enter}9"+strGoID+"{Enter}");
             }
             catch (Exception ex)
             {
@@ -437,7 +374,6 @@ namespace LoginMacro_Form
                 Log_move.Format(ex.ToString());
             }
         }
-
         private void button_repeatExecute_Click(object sender, EventArgs e)
         {
             try
@@ -455,8 +391,7 @@ namespace LoginMacro_Form
                 }
                 else
                 {
-                    Thread_Repeat.Suspend();
-                    Thread_Repeat.Abort();
+                    Thread_Repeat.Interrupt();
                     Thread_Repeat = null;
                 }
             }
@@ -519,15 +454,14 @@ namespace LoginMacro_Form
         {
             try
             {
-                for (int nIndex = 0; nIndex < this.dataGridView_Command.Rows.Count; nIndex++)
+                for (int nIndex = 0; nIndex < dataGridView_Command.SelectedRows.Count; nIndex++)
                 {
-                    if (this.dataGridView_Command.Rows[nIndex].Selected == false)
+                    int nI = dataGridView_Command.SelectedRows[nIndex].Index;
+
+                    if (IDDatas.getDataTable()[GetDataGridSelectID(nI)].nPID == -1)
                         continue;
 
-                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
-                        continue;
-
-                    CommandInput(nIndex, this.dataGridView_Command.Rows[nIndex].Cells["ID"].Value.ToString());
+                    CommandInput(nIndex, this.dataGridView_Command.Rows[nI].Cells["ID"].Value.ToString());
                 }
             }
             catch (Exception ex)

@@ -37,7 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox_Log = new System.Windows.Forms.TextBox();
             this.button_test = new System.Windows.Forms.Button();
-            this.textBox_place = new System.Windows.Forms.TextBox();
+            this.textBox_GoID = new System.Windows.Forms.TextBox();
             this.button_DeleteCommandData = new System.Windows.Forms.Button();
             this.button_return = new System.Windows.Forms.Button();
             this.button_SelCommand = new System.Windows.Forms.Button();
@@ -134,16 +134,16 @@
             this.button_test.Name = "button_test";
             this.button_test.Size = new System.Drawing.Size(72, 34);
             this.button_test.TabIndex = 25;
-            this.button_test.Text = "토로라비";
+            this.button_test.Text = "동쪽";
             this.button_test.UseVisualStyleBackColor = true;
             this.button_test.Click += new System.EventHandler(this.button_test_Click);
             // 
-            // textBox_place
+            // textBox_GoID
             // 
-            this.textBox_place.Location = new System.Drawing.Point(189, 333);
-            this.textBox_place.Name = "textBox_place";
-            this.textBox_place.Size = new System.Drawing.Size(75, 21);
-            this.textBox_place.TabIndex = 26;
+            this.textBox_GoID.Location = new System.Drawing.Point(189, 333);
+            this.textBox_GoID.Name = "textBox_GoID";
+            this.textBox_GoID.Size = new System.Drawing.Size(75, 21);
+            this.textBox_GoID.TabIndex = 26;
             // 
             // button_DeleteCommandData
             // 
@@ -234,7 +234,7 @@
             this.Controls.Add(this.button_SelCommand);
             this.Controls.Add(this.button_return);
             this.Controls.Add(this.button_DeleteCommandData);
-            this.Controls.Add(this.textBox_place);
+            this.Controls.Add(this.textBox_GoID);
             this.Controls.Add(this.button_test);
             this.Controls.Add(this.textBox_Log);
             this.Controls.Add(this.label2);
@@ -266,7 +266,7 @@
         private System.Windows.Forms.TextBox textBox_Log;
         private System.Windows.Forms.Button button_test;
 
-        private System.Windows.Forms.TextBox textBox_place;
+        private System.Windows.Forms.TextBox textBox_GoID;
         private System.Windows.Forms.Button button_DeleteCommandData;
         private System.Windows.Forms.Button button_return;
         private System.Windows.Forms.Button button_SelCommand;
