@@ -50,7 +50,7 @@ namespace LoginMacro_Form
             Thread.Sleep(100);
         }
 
-        public static void Display(int nPID)
+        public static void Display(int nPID, bool bMove = false)
         {
             try
             {
@@ -58,8 +58,7 @@ namespace LoginMacro_Form
                 FindProcess(ref process, nPID);
 
                 if (process != null)
-                    ForegroundProcess(process.MainWindowHandle);
-
+                    ForegroundProcess(process.MainWindowHandle, bMove);
             }
             catch (Exception e)
             {

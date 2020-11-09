@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.SqlServer.Server;
 
 namespace LoginMacro_Form
 {
@@ -30,12 +31,18 @@ namespace LoginMacro_Form
         {
             if (this.InvokeRequired == false)
             {
-                Point p = Control.MousePosition;
-                Point p1 = pictureBox.PointToClient(p);
-                if (p1.X < 0 || p1.X > pictureBox.Image.Width || p1.Y < 0 || p1.Y > pictureBox.Image.Height)
-                    return;
+                try
+                {
+                    Point p = Control.MousePosition;
+                    Point p1 = pictureBox.PointToClient(p);
+                    if (p1.X < 0 || p1.X > pictureBox.Image.Width || p1.Y < 0 || p1.Y > pictureBox.Image.Height)
+                        throw new Exception();
 
-                label_AXIS.Text = $"Y:{p1.Y},X;{p1.X}";
+                    label_AXIS.Text = $"Y:{p1.Y},X;{p1.X}";
+                }
+                catch (Exception ex)
+                {
+                }
             }
             else
             {

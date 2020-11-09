@@ -216,6 +216,7 @@ namespace LoginMacro_Form
                 }
                 catch (ThreadInterruptedException e)
                 {
+                    ProcessControl.KillProcess(nID);
                     logs.Format($"{strID} : 로그인 중지");
                 }
                 catch (Exception e)
@@ -277,12 +278,10 @@ namespace LoginMacro_Form
                 nID = temp.Id;
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
-                ProcessControl.ForegroundProcess(temp.Handle, true);
             }
             catch (Exception e) 
             { 
                 bRet = false;
-                logs.Format(e.ToString());
             }
 
             return bRet;
@@ -297,7 +296,7 @@ namespace LoginMacro_Form
 
                 Thread.Sleep(1200); // 어떻게 할수가없음.
 
-                ProcessControl.Display(nID);
+                ProcessControl.Display(nID, true);
                 do
                 {
                     ProcessControl.keyInput(Keys.Tab);
@@ -312,7 +311,6 @@ namespace LoginMacro_Form
             }
             catch (Exception e) 
             {
-                logs.Format(e.ToString());
                 bRet = false; 
             }
 
@@ -328,7 +326,7 @@ namespace LoginMacro_Form
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
-            catch (Exception e) { logs.Format(e.ToString());  bRet = false; }
+            catch (Exception e) { bRet = false; }
 
             return bRet;
         }
@@ -350,7 +348,6 @@ namespace LoginMacro_Form
             }
             catch (Exception e) 
             {
-                logs.Format(e.ToString()); 
                 bRet = false; 
             }
 
@@ -374,7 +371,7 @@ namespace LoginMacro_Form
                     Thread.Sleep(nSleepTime);//Task.Delay(1000);
                 } while (n++ < nTry);
             }
-            catch(Exception e) { logs.Format(e.ToString()); bRet = false; }
+            catch(Exception e) { bRet = false; }
 
             return bRet;
         }
@@ -421,7 +418,6 @@ namespace LoginMacro_Form
             }
             catch (Exception e)
             {
-                logs.Format(e.ToString());
                 bRet = false;
             }
 
@@ -438,7 +434,7 @@ namespace LoginMacro_Form
 
                 bReconnect = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));
             }
-            catch (Exception e) { logs.Format(e.ToString()); }
+            catch (Exception e) { }
 
             return bReconnect;
         }
@@ -522,12 +518,14 @@ namespace LoginMacro_Form
         
         private void ThreadRefresh()
         {
-            while (true)
+            try
             {
-                lock (lockObject)
+
+                while (true)
                 {
-                    try
+                    lock (lockObject)
                     {
+                        
                         int nIndex = 0;
                         foreach (var data in IDDatas.getDataTable())
                         {
@@ -535,14 +533,14 @@ namespace LoginMacro_Form
                         }
 
                         UICheck();
-                    }
-
-                    catch (Exception)
-                    {
 
                     }
+                    Thread.Sleep(50);
                 }
-                Thread.Sleep(50);
+            }
+            catch (Exception)
+            {
+
             }
         }
 
@@ -649,6 +647,7 @@ namespace LoginMacro_Form
         {
             if (Thread_LE != null && Thread_LE.IsAlive)
                 Thread_LE.Interrupt();
+
             Thread_LE = null;
 
             if (Thread_MultiLE != null && Thread_MultiLE.IsAlive)
