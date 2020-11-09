@@ -44,6 +44,7 @@
             this.button_IDDelete = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_IDFilePath = new System.Windows.Forms.TextBox();
+            this.button_LoginStop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Info)).BeginInit();
             this.SuspendLayout();
             // 
@@ -177,7 +178,7 @@
             // textBox_Log
             // 
             this.textBox_Log.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox_Log.Location = new System.Drawing.Point(668, 151);
+            this.textBox_Log.Location = new System.Drawing.Point(668, 209);
             this.textBox_Log.Multiline = true;
             this.textBox_Log.Name = "textBox_Log";
             this.textBox_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -213,11 +214,23 @@
             this.textBox_IDFilePath.TabIndex = 28;
             this.textBox_IDFilePath.Text = "D:\\";
             // 
+            // button_LoginStop
+            // 
+            this.button_LoginStop.Location = new System.Drawing.Point(668, 149);
+            this.button_LoginStop.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_LoginStop.Name = "button_LoginStop";
+            this.button_LoginStop.Size = new System.Drawing.Size(101, 55);
+            this.button_LoginStop.TabIndex = 29;
+            this.button_LoginStop.Text = "로그인 중지";
+            this.button_LoginStop.UseVisualStyleBackColor = true;
+            this.button_LoginStop.Click += new System.EventHandler(this.button_LoginStop_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(986, 618);
+            this.Controls.Add(this.button_LoginStop);
             this.Controls.Add(this.textBox_IDFilePath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_IDDelete);
@@ -262,6 +275,7 @@
         private System.Windows.Forms.Button button_IDDelete;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_IDFilePath;
+        private System.Windows.Forms.Button button_LoginStop;
     }
 }
 

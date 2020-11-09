@@ -25,47 +25,21 @@ namespace LoginMacro_Form
         public static extern IntPtr GetWindowRect(IntPtr hWnd, ref Rect rect);
         //        private static extern bool SetWindowPos(IntPtr windowHandle, IntPtr windowHandleInsertAfter, int x, int y, int width, int height, SetWindowPosFlag flag);
 
-        [DllImport("user32")]
-        public static extern void BringWindowToTop(IntPtr hWnd);
-        
-
-        [DllImport("user32")]
-        public static extern IntPtr FindWindow(string strClassName, string StrWindowName);
-        //MoveWindow 함수를 호출한다.
-
         [DllImport("user32.dll")]
         public static extern void keybd_event(uint vk, uint scan, uint flags, uint extraInfo);
 
         [DllImport("user32.dll")]
         internal static extern bool MoveWindow(IntPtr hwnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
-
         const uint WM_KEYDOWN = 0x100;
         const uint WM_SYSCOMMAND = 0x018;
         const uint SC_CLOSE = 0x053;
         const uint SHOWWINDOW = 0x0040;
 
-        public void GetWindowRect_test(IntPtr handler, ref Rect rect)
-        {
-            GetWindowRect(handler, ref rect);
-        }
-
-        public void ForegroundProcess(IntPtr handler, ref Rect rect)
-        {
-            ShowWindowAsync(handler, 1);
-            SetForegroundWindow(handler);
-
-            GetWindowRect(handler, ref rect);
-            MoveWindow(handler, 0, 0, rect.right - rect.left, rect.bottom - rect.top, true);
-
-            GetWindowRect(handler, ref rect);
-        }
-
         public static void ForegroundProcess(IntPtr handler, bool bMove = false)
         {
             ShowWindowAsync(handler, 1);
             SetForegroundWindow(handler);
-
 
             if (bMove)
             {
@@ -93,27 +67,6 @@ namespace LoginMacro_Form
             }
         }
 
-        public static void BringWindowToTop(int nPID)
-        {
-            try
-            {
-                Process process = new Process();
-                FindProcess(ref process, nPID);
-
-                if (process != null)
-                    BringWindowToTop(process.MainWindowHandle);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message.ToString());
-            }
-        }
-
-
-        public static void MiniMizedProcess(IntPtr handler)
-        {
-            ShowWindowAsync(handler, 6);
-        }
         public static void MiniMizedProcess(int nPID)
         {
             Process temp = new Process();

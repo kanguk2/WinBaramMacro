@@ -41,11 +41,11 @@
             this.button_DeleteCommandData = new System.Windows.Forms.Button();
             this.button_return = new System.Windows.Forms.Button();
             this.button_SelCommand = new System.Windows.Forms.Button();
-            this.button_repeatExecute = new System.Windows.Forms.Button();
             this.textBox_repeatCount = new System.Windows.Forms.TextBox();
             this.textBox_repeatInterval = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button_repeatExecute = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Command)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_IDInfo)).BeginInit();
             this.SuspendLayout();
@@ -178,6 +178,38 @@
             this.button_SelCommand.UseVisualStyleBackColor = true;
             this.button_SelCommand.Click += new System.EventHandler(this.button_SelCommand_Click);
             // 
+            // textBox_repeatCount
+            // 
+            this.textBox_repeatCount.Location = new System.Drawing.Point(623, 376);
+            this.textBox_repeatCount.Name = "textBox_repeatCount";
+            this.textBox_repeatCount.Size = new System.Drawing.Size(75, 21);
+            this.textBox_repeatCount.TabIndex = 31;
+            // 
+            // textBox_repeatInterval
+            // 
+            this.textBox_repeatInterval.Location = new System.Drawing.Point(701, 376);
+            this.textBox_repeatInterval.Name = "textBox_repeatInterval";
+            this.textBox_repeatInterval.Size = new System.Drawing.Size(75, 21);
+            this.textBox_repeatInterval.TabIndex = 32;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(621, 361);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 12);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Count";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(700, 360);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(77, 12);
+            this.label4.TabIndex = 34;
+            this.label4.Text = "Interval (ms)";
+            // 
             // button_repeatExecute
             // 
             this.button_repeatExecute.Location = new System.Drawing.Point(779, 365);
@@ -188,38 +220,6 @@
             this.button_repeatExecute.Text = "반복 실행";
             this.button_repeatExecute.UseVisualStyleBackColor = true;
             this.button_repeatExecute.Click += new System.EventHandler(this.button_repeatExecute_Click);
-            // 
-            // textBox_repeatCount
-            // 
-            this.textBox_repeatCount.Location = new System.Drawing.Point(622, 378);
-            this.textBox_repeatCount.Name = "textBox_repeatCount";
-            this.textBox_repeatCount.Size = new System.Drawing.Size(75, 21);
-            this.textBox_repeatCount.TabIndex = 31;
-            // 
-            // textBox_repeatInterval
-            // 
-            this.textBox_repeatInterval.Location = new System.Drawing.Point(700, 378);
-            this.textBox_repeatInterval.Name = "textBox_repeatInterval";
-            this.textBox_repeatInterval.Size = new System.Drawing.Size(75, 21);
-            this.textBox_repeatInterval.TabIndex = 32;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(622, 363);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 12);
-            this.label3.TabIndex = 33;
-            this.label3.Text = "Count";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(699, 362);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 12);
-            this.label4.TabIndex = 34;
-            this.label4.Text = "Interval (ms)";
             // 
             // MovementForm
             // 
@@ -270,10 +270,10 @@
         private System.Windows.Forms.Button button_DeleteCommandData;
         private System.Windows.Forms.Button button_return;
         private System.Windows.Forms.Button button_SelCommand;
-        private System.Windows.Forms.Button button_repeatExecute;
         private System.Windows.Forms.TextBox textBox_repeatCount;
         private System.Windows.Forms.TextBox textBox_repeatInterval;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button_repeatExecute;
     }
 }

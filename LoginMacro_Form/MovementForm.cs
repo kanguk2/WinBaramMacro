@@ -418,6 +418,7 @@ namespace LoginMacro_Form
                 button_AddCommandData.Enabled = !bStart;
                 button_DeleteCommandData.Enabled = !bStart;
                 button_SelCommand.Enabled = !bStart;
+                dataGridView_Command.Enabled = !bStart;
             }
             else
             {
@@ -444,7 +445,7 @@ namespace LoginMacro_Form
                 }
             }
             catch(Exception ex) { Log_move.Format(ex.ToString()); }
-            finally
+            finally 
             {
                 changeUI(false);
             }
@@ -461,7 +462,7 @@ namespace LoginMacro_Form
                     if (IDDatas.getDataTable()[GetDataGridSelectID(nI)].nPID == -1)
                         continue;
 
-                    CommandInput(nIndex, this.dataGridView_Command.Rows[nI].Cells["ID"].Value.ToString());
+                    CommandInput(nI, this.dataGridView_Command.Rows[nI].Cells["ID"].Value.ToString());
                 }
             }
             catch (Exception ex)
@@ -473,6 +474,9 @@ namespace LoginMacro_Form
 
         private void MoveFormClosed(object sender, FormClosedEventArgs e)
         {
+            if (Thread_Repeat != null && Thread_Repeat.IsAlive)
+                Thread_Repeat.Interrupt();
+
             Thread_Repeat = null;
         }
     }

@@ -44,6 +44,8 @@ namespace LoginMacro_Form
 
             Thread_Refresh = new Thread(new ThreadStart(ThreadRefresh));
             Thread_Refresh.Start();
+
+            button_LoginStop.Enabled = false;
         }
         
         private void UICheck()
@@ -53,6 +55,12 @@ namespace LoginMacro_Form
                 if (this.InvokeRequired == false)
                 {
                     bool bStatus = (Thread_LE == null && Thread_MultiLE == null);
+
+                    if ((Thread_LE != null && Thread_LE.IsAlive) && (Thread_MultiLE == null || Thread_MultiLE.IsAlive == false))
+                        button_LoginStop.Enabled = true;
+
+                    if (Thread_LE == null || Thread_LE.IsAlive == false)
+                        button_LoginStop.Enabled = false;
 
                     if (Thread_LE != null)
                         bStatus = !Thread_LE.IsAlive;
@@ -66,6 +74,9 @@ namespace LoginMacro_Form
                     button_FilePath.Enabled = bStatus;
                     button_test.Enabled = bStatus;
                     button_FornIC.Enabled = bStatus;
+
+
+
                 }
                 else
                 {
@@ -145,7 +156,8 @@ namespace LoginMacro_Form
             {
                 string strID = GetDataGridSelectID(nIndex);
                 Thread_Refresh.Suspend();
-                logs.Format(strID + " 로그인 시작");
+                logs.Format($"{strID} : 로그인 시작");
+                
 
                 int nID = -1;
                 bool bRet = true;
@@ -183,26 +195,6 @@ namespace LoginMacro_Form
                         {
                             if(eSL != eSeq_Login.LoginError && nTry++ < 2)
                                 eSL = ErrorCheck(nID, strID);
-/*                            if (eSL == eSeq_Login.LoginInputInfo && nTry++ == 0)
-                            {
-                                ProcessControl.keyInput(Keys.Enter, 250);
-                                ProcessControl.keyInput(Keys.Escape, 250);
-                                ProcessControl.keyInput(Keys.Enter, 100);
-
-                                eSL = eSeq_Login.LoginInputInfo;
-                                logs.Format($"{strID} : Input 정보 재입력..");
-
-                                nTry = 0;
-                            }
-                            else if (eSL == eSeq_Login.LoginFinalCheck && nTry++ == 0)
-                            {
-                                ProcessControl.keyInput(Keys.Enter, 100);
-                                logs.Format($"{strID} : Reconnect 확인 재시도..");
-                                Thread.Sleep(3000);
-                                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}2.bmp", eImagetype.total, nID, 5, 500);
-                                eSL = bRet ? eSeq_Login.LoginSelectServer : eSeq_Login.LoginError;
-                            }
-*/
                             else
                             {
                                 strError += eSL.ToString();
@@ -222,6 +214,10 @@ namespace LoginMacro_Form
                         ProcessControl.MiniMizedProcess(nID);
                     }
                 }
+                catch (ThreadInterruptedException e)
+                {
+                    logs.Format($"{strID} : 로그인 중지");
+                }
                 catch (Exception e)
                 {
                     ProcessControl.KillProcess(nID);
@@ -229,11 +225,9 @@ namespace LoginMacro_Form
                 }
                 finally
                 {
-
+                    Thread_Refresh.Resume();
                     logs.Format($"{strID} : 로그인 {((bRet) ? "성공" : "실패")}");
                 }
-
-                Thread_Refresh.Resume();
             }
         }
 
@@ -280,11 +274,10 @@ namespace LoginMacro_Form
             {
                 Process temp = new Process();
                 ProcessControl.executeFile(ref temp, textBox_FilePath.Text.ToString());
-
                 nID = temp.Id;
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
-
+                ProcessControl.ForegroundProcess(temp.Handle, true);
             }
             catch (Exception e) 
             { 
@@ -302,7 +295,7 @@ namespace LoginMacro_Form
             {
                 int nTry = 0;
 
-                Thread.Sleep(1500); // 어떻게 할수가없음.
+                Thread.Sleep(1200); // 어떻게 할수가없음.
 
                 ProcessControl.Display(nID);
                 do
@@ -331,7 +324,7 @@ namespace LoginMacro_Form
             try
             {
                 ProcessControl.keyInput(Keys.Down);
-                ProcessControl.keyInput(Keys.Enter, 1200);
+                ProcessControl.keyInput(Keys.Enter, 1000);
 
                 bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
             }
@@ -345,10 +338,11 @@ namespace LoginMacro_Form
             bool bRet = false;
             try
             {
+                ProcessControl.keyInput(Keys.Enter, 100);
+                ProcessControl.keyInput(Keys.A, 100);
+
                 if (ImageCompareSeq($"{ImageProc.m_strLogin}이미접속중.bmp", eImagetype.total, nID, 2, 100))
                     ProcessControl.keyInput(Keys.Enter, 100);
-
-                ProcessControl.keyInput(Keys.A, 100);
 
                 ProcessControl.keyInput(Keys.Enter, 100);
 
@@ -500,7 +494,7 @@ namespace LoginMacro_Form
         {
             try
             {
-                for(int nIndex = 0; nIndex < IDDatas.getDataTable().Count ;nIndex++)
+                for (int nIndex = 0; nIndex < IDDatas.getDataTable().Count; nIndex++)
                 {
                     if (dataGridView_Info.Rows[nIndex].Selected == false)
                         continue;
@@ -508,12 +502,18 @@ namespace LoginMacro_Form
                     if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID != -1)
                         ProcessControl.Display(IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID);
                     else
-                    {                        
+                    {
                         Thread_LE = new Thread(() => ThreadNewSequence(nIndex)) { IsBackground = false };
                         Thread_LE.Start();
                         Thread_LE.Join();
                     }
                 }
+            }
+            catch (ThreadInterruptedException ex)
+            {
+                Thread_LE.Interrupt();
+                Thread_LE = null;
+                logs.Format("멀티실행 중지");
             }
             catch (Exception)
             {
@@ -647,27 +647,43 @@ namespace LoginMacro_Form
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Thread_Refresh.Abort();
-            Thread_Refresh = null;
+            if (Thread_LE != null && Thread_LE.IsAlive)
+                Thread_LE.Interrupt();
+            Thread_LE = null;
+
+            if (Thread_MultiLE != null && Thread_MultiLE.IsAlive)
+                Thread_MultiLE.Interrupt();
             Thread_MultiLE = null;
+
+            if (Thread_Refresh != null && Thread_Refresh.IsAlive)
+                Thread_Refresh.Interrupt();
+
+            Thread_Refresh = null;
+
             Thread_LE = null;
         }
 
         private void button_multiExecute_Click(object sender, EventArgs e)
         {
-            if(Thread_MultiLE == null || Thread_MultiLE.IsAlive == false)
+            try
             {
-                Thread_MultiLE = new Thread(() => ThreadMultiExecute());
-                Thread_MultiLE.Start();
-            }
-            else
-            {
-                if (Thread_LE != null || Thread_LE.IsAlive)
+                if (Thread_MultiLE == null || Thread_MultiLE.IsAlive == false)
                 {
-                    Thread_LE.Join();
+                    Thread_MultiLE = new Thread(() => ThreadMultiExecute());
+                    Thread_MultiLE.Start();
+                }
+                else
+                {
                     Thread_MultiLE.Interrupt();
                     Thread_MultiLE = null;
                 }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
             }
         }
   
@@ -836,6 +852,24 @@ namespace LoginMacro_Form
                 logs.Format(ex.ToString());
             }
         }
+
+        private void button_LoginStop_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Thread_LE == null)
+                    return;
+
+                if (Thread_LE.IsAlive)
+                {
+                    Thread_LE.Interrupt();
+                    Thread_LE = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logs.Format(ex.ToString());
+            }
+        }
     }
 }
-    
