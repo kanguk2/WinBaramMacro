@@ -46,6 +46,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.button_repeatExecute = new System.Windows.Forms.Button();
+            this.textBox_alarmTime = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.checkBox_SetAlarm = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Command)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_IDInfo)).BeginInit();
             this.SuspendLayout();
@@ -140,7 +143,7 @@
             // 
             // textBox_GoID
             // 
-            this.textBox_GoID.Location = new System.Drawing.Point(189, 333);
+            this.textBox_GoID.Location = new System.Drawing.Point(168, 335);
             this.textBox_GoID.Name = "textBox_GoID";
             this.textBox_GoID.Size = new System.Drawing.Size(75, 21);
             this.textBox_GoID.TabIndex = 26;
@@ -221,11 +224,42 @@
             this.button_repeatExecute.UseVisualStyleBackColor = true;
             this.button_repeatExecute.Click += new System.EventHandler(this.button_repeatExecute_Click);
             // 
+            // textBox_alarmTime
+            // 
+            this.textBox_alarmTime.Location = new System.Drawing.Point(117, 375);
+            this.textBox_alarmTime.Name = "textBox_alarmTime";
+            this.textBox_alarmTime.Size = new System.Drawing.Size(45, 21);
+            this.textBox_alarmTime.TabIndex = 35;
+            this.textBox_alarmTime.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(168, 379);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(16, 12);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "m";
+            // 
+            // checkBox_SetAlarm
+            // 
+            this.checkBox_SetAlarm.AutoSize = true;
+            this.checkBox_SetAlarm.Location = new System.Drawing.Point(14, 378);
+            this.checkBox_SetAlarm.Name = "checkBox_SetAlarm";
+            this.checkBox_SetAlarm.Size = new System.Drawing.Size(100, 16);
+            this.checkBox_SetAlarm.TabIndex = 38;
+            this.checkBox_SetAlarm.Text = "토로라비 시간";
+            this.checkBox_SetAlarm.UseVisualStyleBackColor = true;
+            this.checkBox_SetAlarm.CheckedChanged += new System.EventHandler(this.checkBox_SetAlarm_CheckedChanged);
+            // 
             // MovementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 614);
+            this.Controls.Add(this.checkBox_SetAlarm);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.textBox_alarmTime);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_repeatInterval);
@@ -275,5 +309,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button_repeatExecute;
+        private System.Windows.Forms.TextBox textBox_alarmTime;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBox_SetAlarm;
     }
 }

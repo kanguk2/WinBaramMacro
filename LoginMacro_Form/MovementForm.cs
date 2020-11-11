@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace LoginMacro_Form
 
         private Log Log_move;
         private Thread Thread_Repeat;
+        System.Windows.Forms.Timer timer_alarm;
 
         public MovementForm(ref IDData_KANG IDDatas)
         {
@@ -31,6 +33,10 @@ namespace LoginMacro_Form
             InitIDInfo_Grid();
             InitCommand_Grid();
             Log_move = new Log(ref textBox_Log);
+
+            timer_alarm = new System.Windows.Forms.Timer();
+            timer_alarm.Interval = 30000;
+            timer_alarm.Tick += new EventHandler(TimerAlarm_Tick);
         }
 
         private void InitIDInfo_Grid()
@@ -97,7 +103,7 @@ namespace LoginMacro_Form
 
                 foreach (string strID in this.IDDatas.getDataTable().Keys)
                     cCell.Items.Add(strID);
-                
+
                 this.dataGridView_Command.DataSource = this.CommandDataTable;
 
                 Init_CommandRow();
@@ -261,7 +267,7 @@ namespace LoginMacro_Form
                 commanddatas.Clear();
                 for (int i = 0; i < CommandDataTable.Rows.Count; i++)
                 {
-                    commanddatas.Add(new CommandDatas { strCommand = dataGridView_Command.Rows[i].Cells["명령어"].Value.ToString() });
+                    commanddatas.Add(new CommandDatas { strCommand = dataGridView_Command.Rows[i].Cells["명령어"].Value.ToString()});
                 }
             }
             catch (Exception ex)
@@ -274,9 +280,14 @@ namespace LoginMacro_Form
         {
             try
             {
-                int nIdIndex = dataGridView_IDInfo.CurrentCell.RowIndex;
+                for (int n = 0; n < dataGridView_IDInfo.SelectedRows.Count; n++)
+                {
+                    int nIndex = dataGridView_IDInfo.SelectedRows[n].Index;
+                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID == -1)
+                        continue;
 
-                EastMove(nIdIndex);
+                    EastMove(nIndex);
+                }
             }
             catch (Exception ex)
             {
@@ -322,7 +333,6 @@ namespace LoginMacro_Form
 
                 string strGoID = textBox_GoID.Text;
 
-                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
                 ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
 
                 Log_move.Format($"{strID} {strGoID}로 출두");
@@ -479,5 +489,53 @@ namespace LoginMacro_Form
 
             Thread_Repeat = null;
         }
+
+
+        private void checkBox_SetAlarm_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_SetAlarm.Checked)
+            {
+                textBox_alarmTime.Enabled = false;
+                timer_alarm.Start();
+            }
+            else
+            {
+                textBox_alarmTime.Enabled = true;
+                timer_alarm.Stop();
+            }
+        }
+
+        bool bConfirmAlarm = false;
+
+        private void TimerAlarm_Tick(object sender, EventArgs e)
+        {
+            if (checkBox_SetAlarm.Checked)
+            {
+                int nTime = int.Parse(textBox_alarmTime.Text);
+
+                int nCurTime = int.Parse(System.DateTime.Now.ToString("hh")) % 3 * 60 + int.Parse(System.DateTime.Now.ToString("mm"));
+
+                int nRemainTime = (nTime + 180 - nCurTime) % 180;
+
+                if(nRemainTime < 5)
+                    Log_move.Format($"토로라비까지 {nRemainTime} 분 남았습니다.");
+
+                if (nRemainTime < 2 && bConfirmAlarm == false)
+                {
+                    bConfirmAlarm = true;
+                    if (MessageBox.Show($"토로라비까지 {nRemainTime} 분 남았습니다.\n 메시지창을 더 띄울까요?", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        bConfirmAlarm = false;
+                    }
+                    else
+                    {
+                        bConfirmAlarm = true;
+                    }
+                }
+                else
+                    bConfirmAlarm = false;
+            }
+        }
+
     }
 }

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenCvSharp;
 using Tesseract;
 
 namespace LoginMacro_Form
@@ -74,9 +75,7 @@ namespace LoginMacro_Form
                     button_FilePath.Enabled = bStatus;
                     button_test.Enabled = bStatus;
                     button_FornIC.Enabled = bStatus;
-
-
-
+                    button_test.Enabled = bStatus;
                 }
                 else
                 {
@@ -158,7 +157,6 @@ namespace LoginMacro_Form
                 Thread_Refresh.Suspend();
                 logs.Format($"{strID} : 로그인 시작");
                 
-
                 int nID = -1;
                 bool bRet = true;
                 int nTry = 0;
@@ -268,7 +266,7 @@ namespace LoginMacro_Form
             return retSeq;
         }
 
-        private bool ExecuteProgram(ref int nID)
+        private bool ExecuteProgram(ref int nID, bool bNew = false)
         {
             bool bRet = false;
             try
@@ -277,33 +275,39 @@ namespace LoginMacro_Form
                 ProcessControl.executeFile(ref temp, textBox_FilePath.Text.ToString());
                 nID = temp.Id;
 
-                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
+                if(bNew == false)
+                    bRet = ImageCompareSeq($"{ImageProc.m_strLogin}1.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             { 
                 bRet = false;
             }
-
             return bRet;
         }
 
-        private bool ConnectProgram(int nID)
+        private bool ConnectProgram(int nID, bool bNew = false)
         {
-            bool bRet = false;
+            bool bRet = true;
             try
             {
                 int nTry = 0;
 
-                Thread.Sleep(1200); // 어떻게 할수가없음.
+                if (bNew == false)
+                    Thread.Sleep(1200); // 어떻게 할수가없음.
 
                 ProcessControl.Display(nID, true);
                 do
                 {
                     ProcessControl.keyInput(Keys.Tab);
                     ProcessControl.keyInput(Keys.Tab);
-                    ProcessControl.keyInput(Keys.Enter, 1500);
 
-                    bRet = ImageProc.ImageCompare($"{ImageProc.m_strLogin}2.bmp", new Bitmap(ImageProc.ImageCrop(nID, eImagetype.total)));
+                    if (bNew == false)
+                    {
+                        ProcessControl.keyInput(Keys.Enter, 1500);
+                        bRet = ImageProc.ImageCompare($"{ImageProc.m_strLogin}2.bmp", new Bitmap(ImageProc.ImageCrop(nID, eImagetype.total)));
+                    }
+                    else
+                        ProcessControl.keyInput(Keys.Enter, 100);
 
                     if (bRet == true)
                         break;
@@ -316,22 +320,26 @@ namespace LoginMacro_Form
 
             return bRet;
         }
-        private bool SelectSeverProgram(int nID)
+        private bool SelectSeverProgram(int nID, bool bNew = false)
         {
-            bool bRet = false;
+            bool bRet = true;
             try
             {
                 ProcessControl.keyInput(Keys.Down);
-                ProcessControl.keyInput(Keys.Enter, 1000);
-
-                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
+                if (bNew == false)
+                {
+                    ProcessControl.keyInput(Keys.Enter, 1000);
+                    bRet = ImageCompareSeq($"{ImageProc.m_strLogin}3.bmp", eImagetype.total, nID);
+                }
+                else
+                    ProcessControl.keyInput(Keys.Enter, 100);
             }
             catch (Exception e) { bRet = false; }
 
             return bRet;
         }
 
-        private bool AgreeProgram(int nID)
+        private bool AgreeProgram(int nID, bool bNew = false)
         {
             bool bRet = false;
             try
@@ -339,12 +347,13 @@ namespace LoginMacro_Form
                 ProcessControl.keyInput(Keys.Enter, 100);
                 ProcessControl.keyInput(Keys.A, 100);
 
-                if (ImageCompareSeq($"{ImageProc.m_strLogin}이미접속중.bmp", eImagetype.total, nID, 2, 100))
+                if (bNew == false && ImageCompareSeq($"{ImageProc.m_strLogin}이미접속중.bmp", eImagetype.total, nID, 2, 100))
                     ProcessControl.keyInput(Keys.Enter, 100);
 
                 ProcessControl.keyInput(Keys.Enter, 100);
 
-                bRet = ImageCompareSeq($"{ImageProc.m_strLogin}4.bmp", eImagetype.total, nID);
+                if (bNew == false)
+                   bRet = ImageCompareSeq($"{ImageProc.m_strLogin}4.bmp", eImagetype.total, nID);
             }
             catch (Exception e) 
             {
@@ -376,7 +385,7 @@ namespace LoginMacro_Form
             return bRet;
         }
 
-        private bool InputInfoProgram(int nIndex, int nID)
+        private bool InputInfoProgram(int nIndex, int nID, bool bNew = false)
         {
             bool bRet = false;
             try
@@ -405,8 +414,10 @@ namespace LoginMacro_Form
                         Connectingcheck(nID);
                         Thread.Sleep(500);
                     }
-                    else
+                    else if (bNew == false)
                         bRet = ImageProc.ImageCompare(strFilePath, new Bitmap(img_capture));
+                    else if (bNew == true)
+                        bRet = true;
 
                     if (bRet == true)
                         break;
@@ -515,12 +526,125 @@ namespace LoginMacro_Form
             {
             }
         }
-        
+
+        private void NewMultiThread()
+        {
+            try
+            {
+                List<int> list_ID = new List<int>();
+                List<string> list_strID = new List<string>();
+                for (int n = 0; n < dataGridView_Info.SelectedRows.Count; n++)
+                {
+                    int nIndex = dataGridView_Info.SelectedRows[n].Index; 
+                    if (IDDatas.getDataTable()[GetDataGridSelectID(nIndex)].nPID != -1)
+                        continue;
+
+                    list_ID.Add(nIndex);
+                    list_strID.Add(GetDataGridSelectID(nIndex));
+                }
+
+                Thread_MultiLE = new Thread(() => ThreadNewSequence(list_ID, list_strID)) { IsBackground = false };
+                Thread_MultiLE.Start();
+            }
+            catch (ThreadInterruptedException ex)
+            {
+                if(Thread_MultiLE != null && Thread_MultiLE.IsAlive)
+                    Thread_MultiLE.Interrupt();
+
+                Thread_MultiLE = null;
+                logs.Format("멀티실행 중지");
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void ThreadNewSequence(List<int> list_ID, List<string> list_strID)
+        {
+            lock (lockObject)
+            {
+                Thread_Refresh.Suspend();
+                logs.Format("멀티로그인 시작");
+
+                eSeq_Login eSL = eSeq_Login.LoginExecute;
+                int[] nNeedTime = { 1500, 1500, 1200, 500, 700, 0};
+
+                Stopwatch sw;
+                try
+                {
+                    while (eSL != eSeq_Login.LoginComplete)
+                    {
+                        sw = Stopwatch.StartNew();
+                        string strID;
+                        int nID;
+                        for (int n = 0; n < list_ID.Count(); n++)
+                        {
+                            strID = list_strID[n];
+                            nID = IDDatas.getDataTable()[strID].nPID;
+                            if (eSL != eSeq_Login.LoginExecute)
+                            {
+                                ProcessControl.Display(nID);
+                                Thread.Sleep(450);
+                            }
+                            else
+                                Thread.Sleep(400);
+
+                            switch (eSL)
+                            {
+                                case eSeq_Login.LoginExecute:
+                                    ExecuteProgram(ref nID, true);
+                                    IDDatas.getDataTable()[strID].nPID = nID;
+                                    break;
+                                case eSeq_Login.LoginConnect:
+                                    ConnectProgram(nID, true);
+                                    break;
+                                case eSeq_Login.LoginSelectServer:
+                                    SelectSeverProgram(nID, true);
+                                    break;
+                                case eSeq_Login.LoginAgree:
+                                    AgreeProgram(nID, true);
+                                    InputInfoProgram(list_ID[n], nID, true);
+                                    break;
+                                case eSeq_Login.LoginFinalCheck:
+                                    if (ReconnectCheck(nID) || Connectingcheck(nID) || 
+                                        !ImageCompareSeq($"{ImageProc.m_strIDInfo}{strID}.bmp", eImagetype.name, nID, 1, 50))
+                                    {
+                                        ProcessControl.KillProcess(nID);
+                                        IDDatas.getDataTable()[strID].nPID = -1;
+                                        logs.Format($"{strID} : 로그인실패");
+                                    }
+                                    else
+                                        ProcessControl.MiniMizedProcess(nID);
+                                    break;
+                            }
+                        }
+
+                        sw.Stop();
+                        long lTime = sw.ElapsedMilliseconds;
+                        int nDelay = (int)(nNeedTime[(int)eSL] - lTime);
+                        Thread.Sleep((int)Math.Max(0, nDelay));
+                        sw.Reset();
+                        if (eSL == eSeq_Login.LoginAgree)
+                            eSL++;
+                        eSL++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    logs.Format(e.ToString());
+                }
+                finally
+                {
+                    Thread_Refresh.Resume();
+                    logs.Format($"멀티로그인 완료");
+                }
+            }
+        }
+
         private void ThreadRefresh()
         {
             try
             {
-
                 while (true)
                 {
                     lock (lockObject)
@@ -688,7 +812,7 @@ namespace LoginMacro_Form
   
         private void button_test_Click(object sender, EventArgs e)
         {
-  
+            NewMultiThread();
         }
 
         private void button_FornIC_Click(object sender, EventArgs e)

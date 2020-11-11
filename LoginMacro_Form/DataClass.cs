@@ -16,6 +16,8 @@ namespace LoginMacro_Form
          "동부","송원","장훈","읍루","만번","천안","상곡","어양","관령", "범안"};
     }
 
+
+
     public static class SpecialKey
     {
     }
