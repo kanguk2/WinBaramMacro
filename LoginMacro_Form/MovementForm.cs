@@ -523,7 +523,7 @@ namespace LoginMacro_Form
                 if (nRemainTime < 2 && bConfirmAlarm == false)
                 {
                     bConfirmAlarm = true;
-                    if (MessageBox.Show($"토로라비까지 {nRemainTime} 분 남았습니다.\n 메시지창을 더 띄울까요?", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (MessageBox.Show(new Form{ TopMost = true}, $"토로라비까지 {nRemainTime} 분 남았습니다.\n 메시지창을 더 띄울까요?", "YesOrNo", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         bConfirmAlarm = false;
                     }
