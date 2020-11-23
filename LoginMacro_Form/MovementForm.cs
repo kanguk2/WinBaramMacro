@@ -517,8 +517,10 @@ namespace LoginMacro_Form
 
                 int nRemainTime = (nTime + 180 - nCurTime) % 180;
 
-                if(nRemainTime < 5)
+                if (nRemainTime < 5)
                     Log_move.Format($"토로라비까지 {nRemainTime} 분 남았습니다.");
+                else
+                    bConfirmAlarm = false;
 
                 if (nRemainTime < 2 && bConfirmAlarm == false)
                 {
@@ -532,10 +534,17 @@ namespace LoginMacro_Form
                         bConfirmAlarm = true;
                     }
                 }
-                else
-                    bConfirmAlarm = false;
             }
         }
 
+        private void MovementForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Thread_Repeat != null && Thread_Repeat.IsAlive)
+                Thread_Repeat.Interrupt();
+
+            timer_alarm.Stop();
+
+            Thread_Repeat = null;
+        }
     }
 }

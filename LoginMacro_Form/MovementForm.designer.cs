@@ -280,6 +280,7 @@
             this.Controls.Add(this.dataGridView_Command);
             this.Name = "MovementForm";
             this.Text = "MovementFrom";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MovementForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MoveFormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Command)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_IDInfo)).EndInit();

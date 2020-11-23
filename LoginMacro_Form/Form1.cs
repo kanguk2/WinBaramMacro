@@ -587,7 +587,7 @@ namespace LoginMacro_Form
                                 Thread.Sleep(450);
                             }
                             else
-                                Thread.Sleep(400);
+                                Thread.Sleep(1400);
 
                             switch (eSL)
                             {
@@ -856,7 +856,7 @@ namespace LoginMacro_Form
             {
                 strID = IDDataTable.Rows[nIndex]["ID"].ToString();
                 strPW = IDDataTable.Rows[nIndex]["PW"].ToString();
-                nGroup = (int)IDDataTable.Rows[nIndex]["GROUP"];
+                nGroup = int.Parse(IDDataTable.Rows[nIndex]["GROUP"].ToString());
 
                 IDDatas.getDataTable()[strID].strPW = strPW;
                 IDDatas.getDataTable()[strID].nGroup = nGroup;

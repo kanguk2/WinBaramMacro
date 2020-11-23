@@ -84,6 +84,7 @@ namespace LoginMacro_Form
             
             process.Start();
         }
+
         public static bool CheckProcess(int nPID)
         {
             bool bCheck = true;
