@@ -1,0 +1,12 @@
+D:\Project\VisualCSharp\dashboardUI\bin\Debug\dashboardUI.exe.config
+D:\Project\VisualCSharp\dashboardUI\bin\Debug\dashboardUI.exe
+D:\Project\VisualCSharp\dashboardUI\bin\Debug\dashboardUI.pdb
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.csprojAssemblyReference.cache
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.Form1.resources
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.Properties.Resources.resources
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.csproj.GenerateResource.cache
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.csproj.CoreCompileInputs.cache
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.exe
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.pdb
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.Form_1.resources
+D:\Project\VisualCSharp\dashboardUI\obj\Debug\dashboardUI.Form_2.resources

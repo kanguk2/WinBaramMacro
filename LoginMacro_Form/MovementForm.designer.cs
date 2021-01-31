@@ -56,7 +56,7 @@
             // dataGridView_Command
             // 
             this.dataGridView_Command.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_Command.Location = new System.Drawing.Point(270, 24);
+            this.dataGridView_Command.Location = new System.Drawing.Point(318, 26);
             this.dataGridView_Command.Name = "dataGridView_Command";
             this.dataGridView_Command.RowTemplate.Height = 23;
             this.dataGridView_Command.Size = new System.Drawing.Size(600, 303);
@@ -65,15 +65,15 @@
             // dataGridView_IDInfo
             // 
             this.dataGridView_IDInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_IDInfo.Location = new System.Drawing.Point(12, 24);
+            this.dataGridView_IDInfo.Location = new System.Drawing.Point(14, 26);
             this.dataGridView_IDInfo.Name = "dataGridView_IDInfo";
             this.dataGridView_IDInfo.RowTemplate.Height = 23;
-            this.dataGridView_IDInfo.Size = new System.Drawing.Size(252, 303);
+            this.dataGridView_IDInfo.Size = new System.Drawing.Size(289, 303);
             this.dataGridView_IDInfo.TabIndex = 18;
             // 
             // button_AddCommandData
             // 
-            this.button_AddCommandData.Location = new System.Drawing.Point(426, 331);
+            this.button_AddCommandData.Location = new System.Drawing.Point(474, 330);
             this.button_AddCommandData.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_AddCommandData.Name = "button_AddCommandData";
             this.button_AddCommandData.Size = new System.Drawing.Size(72, 34);
@@ -83,7 +83,7 @@
             // 
             // button_LoadCommandDatas
             // 
-            this.button_LoadCommandDatas.Location = new System.Drawing.Point(348, 331);
+            this.button_LoadCommandDatas.Location = new System.Drawing.Point(396, 330);
             this.button_LoadCommandDatas.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_LoadCommandDatas.Name = "button_LoadCommandDatas";
             this.button_LoadCommandDatas.Size = new System.Drawing.Size(72, 34);
@@ -94,7 +94,7 @@
             // 
             // button_SaveCommandDatas
             // 
-            this.button_SaveCommandDatas.Location = new System.Drawing.Point(270, 331);
+            this.button_SaveCommandDatas.Location = new System.Drawing.Point(318, 330);
             this.button_SaveCommandDatas.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_SaveCommandDatas.Name = "button_SaveCommandDatas";
             this.button_SaveCommandDatas.Size = new System.Drawing.Size(72, 34);
@@ -115,7 +115,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(268, 5);
+            this.label2.Location = new System.Drawing.Point(316, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 12);
             this.label2.TabIndex = 23;
@@ -123,11 +123,11 @@
             // 
             // textBox_Log
             // 
-            this.textBox_Log.Location = new System.Drawing.Point(12, 400);
+            this.textBox_Log.Location = new System.Drawing.Point(0, 406);
             this.textBox_Log.Multiline = true;
             this.textBox_Log.Name = "textBox_Log";
             this.textBox_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_Log.Size = new System.Drawing.Size(858, 213);
+            this.textBox_Log.Size = new System.Drawing.Size(918, 242);
             this.textBox_Log.TabIndex = 24;
             // 
             // button_test
@@ -145,12 +145,12 @@
             // 
             this.textBox_GoID.Location = new System.Drawing.Point(168, 335);
             this.textBox_GoID.Name = "textBox_GoID";
-            this.textBox_GoID.Size = new System.Drawing.Size(75, 21);
+            this.textBox_GoID.Size = new System.Drawing.Size(135, 21);
             this.textBox_GoID.TabIndex = 26;
             // 
             // button_DeleteCommandData
             // 
-            this.button_DeleteCommandData.Location = new System.Drawing.Point(504, 330);
+            this.button_DeleteCommandData.Location = new System.Drawing.Point(552, 329);
             this.button_DeleteCommandData.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_DeleteCommandData.Name = "button_DeleteCommandData";
             this.button_DeleteCommandData.Size = new System.Drawing.Size(72, 34);
@@ -172,7 +172,7 @@
             // 
             // button_SelCommand
             // 
-            this.button_SelCommand.Location = new System.Drawing.Point(779, 330);
+            this.button_SelCommand.Location = new System.Drawing.Point(827, 329);
             this.button_SelCommand.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_SelCommand.Name = "button_SelCommand";
             this.button_SelCommand.Size = new System.Drawing.Size(91, 34);
@@ -183,14 +183,14 @@
             // 
             // textBox_repeatCount
             // 
-            this.textBox_repeatCount.Location = new System.Drawing.Point(623, 376);
+            this.textBox_repeatCount.Location = new System.Drawing.Point(671, 375);
             this.textBox_repeatCount.Name = "textBox_repeatCount";
             this.textBox_repeatCount.Size = new System.Drawing.Size(75, 21);
             this.textBox_repeatCount.TabIndex = 31;
             // 
             // textBox_repeatInterval
             // 
-            this.textBox_repeatInterval.Location = new System.Drawing.Point(701, 376);
+            this.textBox_repeatInterval.Location = new System.Drawing.Point(749, 375);
             this.textBox_repeatInterval.Name = "textBox_repeatInterval";
             this.textBox_repeatInterval.Size = new System.Drawing.Size(75, 21);
             this.textBox_repeatInterval.TabIndex = 32;
@@ -198,7 +198,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(621, 361);
+            this.label3.Location = new System.Drawing.Point(669, 360);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 12);
             this.label3.TabIndex = 33;
@@ -207,7 +207,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(700, 360);
+            this.label4.Location = new System.Drawing.Point(748, 359);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 12);
             this.label4.TabIndex = 34;
@@ -215,7 +215,7 @@
             // 
             // button_repeatExecute
             // 
-            this.button_repeatExecute.Location = new System.Drawing.Point(779, 365);
+            this.button_repeatExecute.Location = new System.Drawing.Point(827, 364);
             this.button_repeatExecute.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_repeatExecute.Name = "button_repeatExecute";
             this.button_repeatExecute.Size = new System.Drawing.Size(91, 34);
@@ -226,7 +226,7 @@
             // 
             // textBox_alarmTime
             // 
-            this.textBox_alarmTime.Location = new System.Drawing.Point(117, 375);
+            this.textBox_alarmTime.Location = new System.Drawing.Point(117, 370);
             this.textBox_alarmTime.Name = "textBox_alarmTime";
             this.textBox_alarmTime.Size = new System.Drawing.Size(45, 21);
             this.textBox_alarmTime.TabIndex = 35;
@@ -235,7 +235,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(168, 379);
+            this.label6.Location = new System.Drawing.Point(168, 374);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(16, 12);
             this.label6.TabIndex = 37;
@@ -244,7 +244,7 @@
             // checkBox_SetAlarm
             // 
             this.checkBox_SetAlarm.AutoSize = true;
-            this.checkBox_SetAlarm.Location = new System.Drawing.Point(14, 378);
+            this.checkBox_SetAlarm.Location = new System.Drawing.Point(14, 373);
             this.checkBox_SetAlarm.Name = "checkBox_SetAlarm";
             this.checkBox_SetAlarm.Size = new System.Drawing.Size(100, 16);
             this.checkBox_SetAlarm.TabIndex = 38;
@@ -256,7 +256,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(882, 614);
+            this.ClientSize = new System.Drawing.Size(919, 646);
             this.Controls.Add(this.checkBox_SetAlarm);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox_alarmTime);

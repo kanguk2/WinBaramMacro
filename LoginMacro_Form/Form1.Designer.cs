@@ -72,6 +72,7 @@
             // 
             this.textBox_FilePath.Location = new System.Drawing.Point(156, 8);
             this.textBox_FilePath.Name = "textBox_FilePath";
+            this.textBox_FilePath.ReadOnly = true;
             this.textBox_FilePath.Size = new System.Drawing.Size(496, 24);
             this.textBox_FilePath.TabIndex = 7;
             this.textBox_FilePath.Text = "D:\\";

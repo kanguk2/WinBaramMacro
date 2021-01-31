@@ -682,12 +682,12 @@ namespace LoginMacro_Form
 
                 if (bCheck != preProcessCheck)
                 {
-                    ChangeTextRow(nIndex, bCheck);
-
                     if (bCheck == false)
                     {
                         IDDatas.getDataTable()[IDDataTable.Rows[nIndex]["ID"].ToString()].nPID = -1;
                     }
+
+                    ChangeTextRow(nIndex, bCheck);
                 }
             }
             catch (Exception){ }

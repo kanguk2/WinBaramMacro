@@ -46,20 +46,30 @@ namespace LoginMacro_Form
             IDDataTable.Columns[0].ReadOnly = true;
             IDDataTable.Columns[1].ReadOnly = true;
 
+            DataGridViewButtonColumn BTSingleMove = new DataGridViewButtonColumn();
+            BTSingleMove.HeaderText = "이동";
+            BTSingleMove.Name = "BTSingleMove";
+            BTSingleMove.Text = "이동";
+            BTSingleMove.UseColumnTextForButtonValue = true;
+
             DataGridViewButtonColumn BTDisplay = new DataGridViewButtonColumn();
-            BTDisplay.HeaderText = "";
+            BTDisplay.HeaderText = "보기";
             BTDisplay.Name = "BTDisplay";
             BTDisplay.Text = "보기";
             BTDisplay.UseColumnTextForButtonValue = true;
 
             dataGridView_IDInfo.CellClick += new DataGridViewCellEventHandler(BTDisplay_Click);
+            dataGridView_IDInfo.CellClick += new DataGridViewCellEventHandler(BTSigleMove_Click);
 
             Init_IDRow();
             this.dataGridView_IDInfo.DataSource = this.IDDataTable;
 
+            this.dataGridView_IDInfo.Columns.Add(BTSingleMove);
             this.dataGridView_IDInfo.Columns.Add(BTDisplay);
+
             this.dataGridView_IDInfo.Columns["ID"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.dataGridView_IDInfo.Columns["Group"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.dataGridView_IDInfo.Columns["BTSingleMove"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.dataGridView_IDInfo.Columns["BTDisplay"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
         }
 
@@ -80,7 +90,31 @@ namespace LoginMacro_Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString());
+                Log_move.Format(ex.ToString());
+            }
+        }
+
+        private void BTSigleMove_Click(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex < 0 || e.ColumnIndex !=
+                    dataGridView_IDInfo.Columns["BTSingleMove"].Index) return;
+
+                int nIndex = e.RowIndex;
+                string strID = GetDataGridSelectID(nIndex);
+                string strGoID = textBox_GoID.Text;
+
+                ProcessControl.Display(IDDatas.getDataTable()[strID].nPID);
+
+                Log_move.Format($"{strID} {strGoID}로 출두");
+
+                SendKeys.SendWait("04{enter}9" + strGoID + "{Enter}");
+            }
+
+            catch (Exception ex)
+            {
+                Log_move.Format(ex.ToString());
             }
         }
 
@@ -88,7 +122,6 @@ namespace LoginMacro_Form
         {
             try
             {
-                CommandDataTable.Columns.Add("명령어");
 
                 DataGridViewButtonColumn BTSingle = new DataGridViewButtonColumn();
                 BTSingle.HeaderText = "";
@@ -96,19 +129,22 @@ namespace LoginMacro_Form
                 BTSingle.Text = "명령수행";
                 BTSingle.UseColumnTextForButtonValue = true;
 
-                DataGridViewComboBoxColumn  cCell = new DataGridViewComboBoxColumn();
+                dataGridView_Command.Columns.Add(BTSingle);
+                CommandDataTable.Columns.Add("명령어");
+
+                DataGridViewComboBoxColumn cCell = new DataGridViewComboBoxColumn();
                 cCell.HeaderText = "ID";
                 cCell.Name = "ID";
                 cCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
 
-                foreach (string strID in this.IDDatas.getDataTable().Keys)
-                    cCell.Items.Add(strID);
+                foreach (KeyValuePair<string, Datas> items in this.IDDatas.getDataTable())
+                    if (items.Value.nPID != -1)
+                        cCell.Items.Add(items.Key);
 
                 this.dataGridView_Command.DataSource = this.CommandDataTable;
 
                 Init_CommandRow();
 
-                dataGridView_Command.Columns.Add(BTSingle);
                 dataGridView_Command.CellClick += new DataGridViewCellEventHandler(CommandInput_Click);
                 dataGridView_Command.Columns.Add(cCell);
 
@@ -118,7 +154,7 @@ namespace LoginMacro_Form
             }
             catch (Exception e)
             {
-                Log_move.Format(e.Message.ToString());
+                MessageBox.Show(e.Message.ToString());
             }
         }
 
@@ -469,10 +505,15 @@ namespace LoginMacro_Form
                 {
                     int nI = dataGridView_Command.SelectedRows[nIndex].Index;
 
-                    if (IDDatas.getDataTable()[GetDataGridSelectID(nI)].nPID == -1)
+                    String strID = dataGridView_Command.Rows[nI].Cells["ID"].Value.ToString();
+
+                    if (strID == "")
+                        throw new Exception("아이디 선택을 해주세요.");
+
+                    if (IDDatas.getDataTable()[strID].nPID == -1)
                         continue;
 
-                    CommandInput(nI, this.dataGridView_Command.Rows[nI].Cells["ID"].Value.ToString());
+                    CommandInput(nI, strID);
                 }
             }
             catch (Exception ex)
